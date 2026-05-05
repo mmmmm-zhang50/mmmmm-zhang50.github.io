@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>匠心传承 · 非遗文化影像馆</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f7f5f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", serif;
+      padding: 30px 20px 60px;
+    }
+    .zhanwei{
+      width: 100%;
+      height: 80px;
+    }
+     /* ===== 导航栏 ===== */
+    .box1 {
+      height: 70px;
+      width: 100%;
+      background-color: rgba(100, 75, 55, 0.85);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      border-bottom: 1px solid rgba(201, 168, 124, 0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+
+    .logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      background-color: #c9a87c;
+    }
+
+    .logo span {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #e8e2d4;
+      letter-spacing: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-item {
+      width: 100px;
+      text-align: center;
+      color: #e8e2d4;
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 6px 18px;
+      border-radius: 20px;
+      transition: all 0.3s;
+      letter-spacing: 1px;
+    }
+
+    .nav-item:hover {
+      background-color: rgba(180, 76, 58, 0.8);
+      color: #fff;
+    }
+
+    .user-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid #c9a87c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c9a87c;
+      font-size: 1rem;
+      overflow: hidden;
+    }
+
+    .user-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+
+    .username {
+      font-size: 0.82rem;
+      font-weight: bold;
+      color: #e8e2d4;
+    }
+
+    .user-status {
+      font-size: 0.62rem;
+      color: #c9a87c;
+    }
+
+    .login-btn {
+      background-color: #b44c3a;
+      color: #fff;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+
+    .login-btn:hover {
+      background-color: #9e3a2a;
+      transform: translateY(-2px);
+    }
+
+    .user-area.logged-out .user-avatar,
+    .user-area.logged-out .user-info {
+      display: none;
+    }
+
+    .user-area.logged-in .login-btn {
+      display: none;
+    }
+
+    /* 下拉框容器 */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-toggle {
+      cursor: pointer;
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 160px;
+      background: rgba(139, 109, 44, 0.7); /* 古铜金色，70%不透明，有通透感 */
+      backdrop-filter: blur(8px); /* 毛玻璃效果 */
+      -webkit-backdrop-filter: blur(8px); /* 兼容 Safari */
+      border: 1px solid rgba(212, 175, 55, 0.6);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 999;
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .dropdown-item {
+      display: block;
+      padding: 10px 16px;
+      color: #fff; /* 白色字，在金底色上清晰 */
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    .dropdown-item:hover {
+      background: rgba(212, 175, 55, 0.3);
+      color: #f1d592;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+    /* ===== 右侧悬浮菜单 ===== */
+    .side-menu-trigger {
+      position: fixed;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 80px;
+      background-color: rgba(100, 75, 55, 0.85);
+      backdrop-filter: blur(8px);
+      border-radius: 8px 0 0 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1100;
+      color: #c9a87c;
+      font-size: 1.1rem;
+      box-shadow: -3px 0 15px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s;
+    }
+
+    .side-menu-trigger:hover {
+      background-color: rgba(180, 76, 58, 0.9);
+    }
+
+    .side-menu {
+      position: fixed;
+      right: -130px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 120px;
+      background-color: rgba(60, 40, 25, 0.92);
+      backdrop-filter: blur(12px);
+      border-radius: 10px 0 0 10px;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 0;
+      z-index: 1099;
+      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.4);
+      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(201, 168, 124, 0.2);
+      border-right: none;
+    }
+
+    .side-menu.open {
+      right: 0;
+    }
+
+    .side-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 0;
+      color: #c9a87c;
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      transition: all 0.25s;
+      border-bottom: 1px solid rgba(201, 168, 124, 0.1);
+    }
+
+    .side-item:last-child {
+      border-bottom: none;
+    }
+
+    .side-item i {
+      font-size: 1.1rem;
+    }
+
+    .side-item:hover {
+      background-color: rgba(180, 76, 58, 0.6);
+      color: #fff;
+    }
+
+    .page-title {
+      margin-top: 70px;
+      text-align: center;
+      font-size: 42px;
+      font-weight: 600;
+      color: #2c2420;
+      margin-bottom: 10px;
+      letter-spacing: 3px;
+    }
+
+    .page-subtitle {
+      text-align: center;
+      font-size: 16px;
+      color: #8a7c74;
+      margin-bottom: 50px;
+      letter-spacing: 1px;
+    }
+
+    .waterfall {
+      max-width: 1300px;
+      margin: 0 auto;
+      column-count: 4;
+      column-gap: 24px;
+    }
+
+    .card {
+      position: relative;
+      margin-bottom: 24px;
+      break-inside: avoid;
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      transition: all 0.35s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+    }
+
+    .card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    .card .desc {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 18px 16px;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      color: #fff;
+      font-size: 15px;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+    }
+
+    .card:hover .desc {
+      opacity: 1;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.9);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
+      padding: 2rem;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-img {
+      max-height: 85vh;
+      max-width: 55%;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0, 0.5);
+    }
+
+    .modal-text {
+      font-family: "KaiTi", "STKaiti", serif;
+      font-size: 32px;
+      line-height: 2;
+      color: #f1e4c8;
+      max-width: 450px;
+      letter-spacing: 2px;
+    }
+
+    @media (max-width: 992px) {
+      .waterfall { column-count: 3; }
+    }
+    @media (max-width: 768px) {
+      .waterfall { column-count: 2; }
+      .page-title { font-size: 32px; }
+      .modal {
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      .modal-img {
+        max-width: 90%;
+        max-height: 50vh;
+      }
+      .modal-text {
+        font-size: 22px;
+        text-align: center;
+      }
+    }
+    @media (max-width: 576px) {
+      .waterfall { column-count: 1; }
+    }
+    @keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+   .playing {
+     animation: rotate 8s linear infinite;
+   }
+  </style>
+</head>
+
+<body>
+   <!-- 导航栏 -->
+  <div class="box1">
+    <div class="logo">
+      <img src="./图片/logo.png" alt="云赏非遗">
+      <span>云赏非遗</span>
+    </div>
+    <nav class="nav-links">
+      <a href="./主页.html" class="nav-item">主页</a>
+      <a href="./3D地图/indext.html" class="nav-item">3D地图</a>
+      <div class="dropdown">
+        <a href="javascript:;" class="nav-item dropdown-toggle">项目展览</a>
+    <div class="dropdown-menu">
+      <a href="./3d光球.html" class="dropdown-item">3D粒子系统</a>
+      <a href="./3D照片墙/index.html" class="dropdown-item">照片博物馆</a>
+    </div>
+  </div>
+      <a href="./非遗论坛/index.html" class="nav-item">非遗论坛</a>
+      <a href="./ai/ai.html" class="nav-item">AI助手</a>
+    </nav>
+    
+    <div class="user-area">
+      <div class="user-avatar" onclick="goMyPage()">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <div class="user-info">
+        <span class="username">非遗传承人</span>
+        <span class="user-status">已登录</span>
+      </div>
+      <a href="./个人主页/index.html" class="login-btn">登录/注册</a>
+    </div>
+  </div>
+
+  <!-- 右侧浮动菜单 -->
+  <div class="side-menu-trigger" id="sideMenuTrigger">
+    <i class="fa-solid fa-bars-staggered"></i>
+  </div>
+  <div class="side-menu" id="sideMenu">
+    <a href="./游戏/game.html" class="side-item"><i class="fa-solid fa-house"></i><span>非遗消消乐</span></a>
+    <a href="./游戏/game2.html" class="side-item"><i class="fa-solid fa-images"></i><span>非遗华容道</span></a>
+    <a href="./游戏/game3.html" class="side-item"><i class="fa-solid fa-person"></i><span>非遗大富翁</span></a>
+    <a href="#footer" class="side-item"><i class="fa-solid fa-address-card"></i><span>关于我们</span></a>
+  </div>
+ 
+  <audio id="bgm" loop src="bgm.mp3"></audio>
+<div id="musicBtn" style="position:fixed;top:20px;left:20px;width:50px;height:50px;border-radius:50%;overflow:hidden;z-index:999;cursor:pointer;margin-top: 70px;margin-left: 15px;"><img src="./images/IMG_20260405_174621.jpg" style="width:100%;height:100%;object-fit:cover;"></div>
+  <h1 class="page-title">匠心传承 · 非遗文化影像馆</h1>
+  <p class="page-subtitle">守千年文脉 · 赏东方雅艺</p>
+  <div class="waterfall" id="waterfall"></div>
+  <div class="modal" id="modal">
+    <img class="modal-img" id="modalImg">
+    <div class="modal-text" id="modalText"></div>
+  </div>
+
+  <script>
+    function goMyPage() {
+  // 直接跳个人主页
+  location.href = './个人主页/index.html';
+}
+    // ===== 用户登录状态 =====
+    const userArea = document.querySelector('.user-area');
+    const loginBtn = document.querySelector('.login-btn');
+    const isLoggedIn = true; // 改为 true 查看已登录效果
+
+    userArea.classList.toggle('logged-in', isLoggedIn);
+    userArea.classList.toggle('logged-out', !isLoggedIn);
+
+    loginBtn?.addEventListener('click', () => {
+      window.location.href = './login.html';
+    });
+   
+    // ===== 下拉框 =====
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+    dropdownToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      dropdownMenu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.dropdown')) {
+        dropdownMenu.classList.remove('show');
+      }
+    });
+
+    // ===== 右侧悬浮菜单 =====
+    const trigger = document.getElementById('sideMenuTrigger');
+    const sideMenu = document.getElementById('sideMenu');
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sideMenu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!sideMenu.contains(e.target) && !trigger.contains(e.target)) {
+        sideMenu.classList.remove('open');
+      }
+    });
+
+    // 点击菜单项后自动关闭
+    document.querySelectorAll('.side-item').forEach(item => {
+      item.addEventListener('click', () => sideMenu.classList.remove('open'));
+    });
+
+     document.getElementById("musicBtn").onclick=()=>{
+  let a=document.getElementById("bgm");
+  let btn=document.getElementById("musicBtn");
+  if(a.paused){a.play(); btn.classList.add("playing");}
+  else{a.pause(); btn.classList.remove("playing");}
+};
+  
+    // 完全匹配你本地文件：images/photo1.jpg ~ photo10.jpg
+    const list = [
+      { img: "images/photo2.jpg", text:"油纸伞：伞承烟雨江南梦，丹青绘尽风雅千年情" },
+      { img: "images/photo21.png", text: "簪花：鬓边簪花映娇颜，将春日芳华别在发髻间" },
+      { img: "images/photo3.jpg", text: "剪纸：红笺一剪生万象，剪出人间喜庆与山河锦绣" },
+      { img: "images/photo30.jpg", text: "核雕：刀笔雕琢藏乾坤，于木石间刻下岁月风骨" },
+      { img: "images/photo5.jpg", text: "青花瓷：白釉青花一火成，釉色晕染东方清雅意境" },
+      { img: "images/photo12.jpg", text: "木版年画 · 墨色印福，传承民俗风情" },
+      { img: "images/photo7.jpg", text: "云肩：层叠云肩绕肩头，绣满云霞与四季祥瑞" },
+      { img: "images/photo31.png", text: "泥塑：一捧黄土捏百态，匠心塑就人间烟火情" },
+      { img: "images/photo34.jpg", text: "核雕：寸核藏精巧匠心，微雕镌刻山河万千柔情" },
+      { img: "images/photo8.jpg", text: "竹编 · 指间经纬，编织自然之美" },
+      { img: "images/photo26.jpg", text: "风筝：一纸乘风上青云，载着人间祈愿飞向天际" },
+      { img: "images/photo24.jpg", text: "太平绣球：彩线缠绕寄情思，绣球抛转间尽是喜乐" },
+      { img: "images/photo23.jpg", text: "刺绣：丝线穿梭绘山河，指尖绣出千年匠心风华" },
+      { img: "images/photo6.jpg", text: "扎染：蓝白晕染天成趣，布上开出自然写意云烟" },
+      { img: "images/photo20.png", text: "竹编：青竹经纬交错间，编出岁月质朴与生活雅趣" },
+      { img: "images/photo15.jpg", text: "剪纸：红笺一剪生万象，剪出人间喜庆与山河锦绣" },
+      { img: "images/photo16.png", text: "汉服：轻纱如雾织流云，衣袂间尽显飘逸古韵" },
+      { img: "images/photo1.jpg", text: "活字印刷：一字一印承文脉，墨香流转千年华夏史" },
+      { img: "images/photo13.png", text: "宫廷团扇：轻摇团扇掩温柔，扇面藏尽东方古典雅致" },
+      { img: "images/photo18.png", text: "布老虎：一针一线缝吉祥，憨态可掬守护岁岁平安" },
+      { img: "images/photo22.jpg", text: "油纸伞：一伞烟雨入江南，伞面绘尽人间风月与山河" },
+      { img: "images/photo28.jpg", text: "花馍：面塑如花绽案头，蒸出人间烟火与吉祥意" },
+      { img: "images/photo4.jpg", text: "宫灯：灯盏高悬照长夜，雕梁画栋映出盛世风华" },
+      { img: "images/photo11.jpg", text: "种子画：籽粒缀拼融自然，方寸凝住山野清欢诗意"},
+      { img: "images/photo19.png", text: "鱼灯：灯影摇曳似鱼游，点亮水乡夜色与民俗温情" },
+      { img: "images/photo9.jpg", text: "香囊：锦缎藏香纳清韵，缕丝缠尽岁岁安康心意" },
+      { img: "images/photo27.jpg", text: "糖画：以糖为墨勺作笔，凝固成舌尖上的非遗画卷" },
+      { img: "images/photo17.jpg", text: "打铁花：星火漫天如夜雪，铁水熔铸出极致的浪漫" },
+      { img: "images/photo14.png", text: "中国结：绳结相系绾同心，一缕红线系住家国情怀" },
+      { img: "images/photo33.png", text: "舞狮：金狮腾跃贺升平，锣鼓声中尽显昂扬气势" },
+      { img: "images/photo29.png", text: "傩戏：假面舞动驱祥瑞，古韵演绎千年祈福风华" },
+      { img: "images/photo10.jpg", text: "皮影戏：一纸影人身世起，幕布之后演尽世间悲欢" },
+      { img: "images/photo32.jpg", text: "叶雕：一叶藏匠心镂刻清欢，纹路凝尽山河雅致" },
+      { img: "images/photo25.png", text: "珠绣：粒粒莹光缀绣风华，丝线串起古韵柔情"}
+      
+    ];
+
+    const waterfall = document.getElementById("waterfall");
+    const modal = document.getElementById("modal");
+    const modalImg = document.getElementById("modalImg");
+    const modalText = document.getElementById("modalText");
+
+    list.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "card";
+      // 修复语法错误，补全引号
+      card.innerHTML = `
+        <img src="${item.img}" alt="非遗">
+        <div class="desc">${item.text}</div>
+      `;
+      card.onclick = () => {
+        modalImg.src = item.img;
+        modalText.innerText = item.text;
+        modal.classList.add("show");
+      };
+      waterfall.appendChild(card);
+    });
+
+    modal.onclick = () => modal.classList.remove("show");
+    function goMyPage() {
+  location.href = "./个人主页/index.html";
+}
+  </script>
+
+</body>
+</html>

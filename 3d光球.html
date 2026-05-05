@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>非遗文化 - 手势控制3D光球</title>
+    <link rel="stylesheet" href="zhanshi.css">
+</head>
+<body>
+    <div class="title-glass">
+        <h1>非遗文化 · 光影传承</h1>
+        <p>Intangible Cultural Heritage</p>
+    </div>
+    <div class="info-panel">
+        <h3>魔法手势粒子光球</h3>
+        <p>握拳 → 合拢为光球 | 五指张开 → 粒子散开 </p>
+        <p>点击中心金球，查看详细图片</p>
+    </div>
+    <div class="gesture-status" id="gestureStatus">等待手势识别...</div>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+            }
+        }
+    </script>
+    
+    <script src="https://unpkg.com/@mediapipe/camera_utils/camera_utils.js"></script>
+<script src="https://unpkg.com/@mediapipe/hands/hands.js"></script>
+    <script type="module" src="zhanshi.js"></script>
+</body>
+</html>

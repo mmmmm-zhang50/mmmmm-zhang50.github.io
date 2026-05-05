@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>云赏非遗—非遗活态传承数字平台</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: linear-gradient(135deg, #DBC9B5, #C1AA91, #A38569);
+      overflow-x: hidden;
+      font-family: "Noto Serif SC", "Lora", serif;
+    }
+
+    /* ===== 导航栏 ===== */
+    .box1 {
+      height: 70px;
+      width: 100%;
+      background-color: rgba(100, 75, 55, 0.85);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      border-bottom: 1px solid rgba(201, 168, 124, 0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+
+    .logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      background-color: #c9a87c;
+    }
+
+    .logo span {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #e8e2d4;
+      letter-spacing: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-item {
+      color: #e8e2d4;
+      text-decoration: none;
+      width: 100px;
+      text-align: center;
+      font-size: 0.9rem;
+      padding: 6px 18px;
+      border-radius: 20px;
+      transition: all 0.3s;
+      letter-spacing: 1px;
+    }
+
+    .nav-item:hover {
+      background-color: rgba(180, 76, 58, 0.8);
+      color: #fff;
+    }
+
+    .user-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid #c9a87c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c9a87c;
+      font-size: 1rem;
+      overflow: hidden;
+    }
+
+    .user-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+
+    .username {
+      font-size: 0.82rem;
+      font-weight: bold;
+      color: #e8e2d4;
+    }
+
+    .user-status {
+      font-size: 0.62rem;
+      color: #c9a87c;
+    }
+
+    .login-btn {
+      background-color: #b44c3a;
+      color: #fff;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+
+    .login-btn:hover {
+      background-color: #9e3a2a;
+      transform: translateY(-2px);
+    }
+
+    .user-area.logged-out .user-avatar,
+    .user-area.logged-out .user-info {
+      display: none;
+    }
+
+    .user-area.logged-in .login-btn {
+      display: none;
+    }
+
+    /* 下拉框容器 */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-toggle {
+      cursor: pointer;
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 160px;
+      background: rgba(139, 109, 44, 0.7); /* 古铜金色，70%不透明，有通透感 */
+      backdrop-filter: blur(8px); /* 毛玻璃效果 */
+      -webkit-backdrop-filter: blur(8px); /* 兼容 Safari */
+      border: 1px solid rgba(212, 175, 55, 0.6);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 999;
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .dropdown-item {
+      display: block;
+      padding: 10px 16px;
+      color: #fff; /* 白色字，在金底色上清晰 */
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    .dropdown-item:hover {
+      background: rgba(212, 175, 55, 0.3);
+      color: #f1d592;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+    /* ===== 右侧悬浮菜单 ===== */
+    .side-menu-trigger {
+      position: fixed;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 80px;
+      background-color: rgba(100, 75, 55, 0.85);
+      backdrop-filter: blur(8px);
+      border-radius: 8px 0 0 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1100;
+      color: #c9a87c;
+      font-size: 1.1rem;
+      box-shadow: -3px 0 15px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s;
+    }
+
+    .side-menu-trigger:hover {
+      background-color: rgba(180, 76, 58, 0.9);
+    }
+
+    .side-menu {
+      position: fixed;
+      right: -130px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 120px;
+      background-color: rgba(60, 40, 25, 0.92);
+      backdrop-filter: blur(12px);
+      border-radius: 10px 0 0 10px;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 0;
+      z-index: 1099;
+      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.4);
+      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(201, 168, 124, 0.2);
+      border-right: none;
+    }
+
+    .side-menu.open {
+      right: 0;
+    }
+
+    .side-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 0;
+      color: #c9a87c;
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      transition: all 0.25s;
+      border-bottom: 1px solid rgba(201, 168, 124, 0.1);
+    }
+
+    .side-item:last-child {
+      border-bottom: none;
+    }
+
+    .side-item i {
+      font-size: 1.1rem;
+    }
+
+    .side-item:hover {
+      background-color: rgba(180, 76, 58, 0.6);
+      color: #fff;
+    }
+
+    /* ===== 轮播图 ===== */
+    .slider {
+      width: 100%;
+      height: 100vh;
+      /* 占满整个视口高度 */
+      position: relative;
+      overflow: hidden;
+      margin-top: 0;
+      /* 不留顶部间距，导航栏浮在上面 */
+      margin-bottom: 150px;
+    }
+
+    .imges {
+      width: 400%;
+      height: 100%;
+      display: flex;
+      position: absolute;
+      left: 0;
+      /* 用 transform 代替 left，避免百分比基准错误 */
+      transform: translateX(0);
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .img {
+      width: 25%;
+      /* 400% / 4 张 */
+      height: 100%;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .min {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      position: absolute;
+      bottom: 24px;
+      width: 100%;
+      z-index: 10;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .m {
+      width: 10px;
+      height: 10px;
+      cursor: pointer;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.5);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+
+    .m.active {
+      background-color: #c9a87c;
+      border-color: #c9a87c;
+      transform: scale(1.4);
+    }
+
+    .buttom {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      user-select: none;
+    }
+
+    .buttom-left,
+    .buttom-right {
+      font-size: 3rem;
+      background-color: rgba(0, 0, 0, 0.2);
+      padding: 0 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      color: rgba(255, 255, 255, 0.85);
+      transition: background 0.3s;
+    }
+
+    .buttom-left:hover,
+    .buttom-right:hover {
+      background-color: rgba(0, 0, 0, 0.45);
+    }
+    .ziti {
+      text-align: center;
+      font-size: 25px;
+      color: #3d2b1a;
+      letter-spacing: 4px;
+      margin-bottom: 10px;
+      font-weight: 1000px;
+    }
+
+    /* ===== 3D 旋转展示（4张图） ===== */
+    .shell {
+      width: 90%;
+      height: 50vw;
+      max-width: 1200px;
+      max-height: 650px;
+      margin: 80px auto 0;
+      display: flex;
+      align-items: center;
+      perspective: 1000px;
+      position: relative;
+    }
+
+    .content {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transform-origin: center;
+      transform-style: preserve-3d;
+      animation: carousel 12s infinite cubic-bezier(0.77, 0, 0.175, 1) forwards;
+    }
+
+    .item {
+      position: absolute;
+      width: 80vw;
+      height: 50vw;
+      max-width: 1200px;
+      max-height: 650px;
+      box-shadow: 0 5px 30px rgba(0, 0, 0, 0.4);
+      border-radius: 8px;
+      background-size: cover;
+      background-position: center;
+      background-color: #3d2b1a;
+      -webkit-box-reflect: below 20px -webkit-linear-gradient(transparent 55%, rgba(255, 255, 255, 0.2));
+    }
+
+    /* 4张图均匀分布，每张间隔90度 */
+    .item:nth-child(1) {
+      transform: rotateY(0deg) translateZ(600px);
+    }
+
+    .item:nth-child(2) {
+      transform: rotateY(90deg) translateZ(600px);
+    }
+
+    .item:nth-child(3) {
+      transform: rotateY(180deg) translateZ(600px);
+    }
+
+    .item:nth-child(4) {
+      transform: rotateY(270deg) translateZ(600px);
+    }
+
+    @keyframes carousel {
+
+      0%,
+      18% {
+        transform: translateZ(-600px) rotateY(0deg);
+      }
+
+      25%,
+      43% {
+        transform: translateZ(-600px) rotateY(-90deg);
+      }
+
+      50%,
+      68% {
+        transform: translateZ(-600px) rotateY(-180deg);
+      }
+
+      75%,
+      93% {
+        transform: translateZ(-600px) rotateY(-270deg);
+      }
+
+      100% {
+        transform: translateZ(-600px) rotateY(-360deg);
+      }
+    }
+
+    /* ===== 非遗时间轴 ===== */
+    .timeline-section {
+      width: 90%;
+      max-width: 1100px;
+      margin: 100px auto 60px;
+      padding: 0 20px;
+      margin-top: 200px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      color: #3d2b1a;
+      letter-spacing: 4px;
+      margin-bottom: 8px;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: #7a5c3e;
+      font-size: 1rem;
+      letter-spacing: 3px;
+      margin-bottom: 60px;
+      max-width: 800px;
+      text-align: center;
+      margin: 0 auto;
+      margin-bottom: 80px;
+    }
+
+    .timeline {
+      position: relative;
+      padding: 0;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(to bottom, transparent, #c9a87c 5%, #c9a87c 95%, transparent);
+      transform: translateX(-50%);
+    }
+
+    .tl-item {
+      display: flex;
+      width: 50%;
+      padding-bottom: 60px;
+      position: relative;
+    }
+
+    .tl-left {
+      justify-content: flex-end;
+      padding-right: 50px;
+      left: 0;
+    }
+
+    .tl-right {
+      justify-content: flex-start;
+      padding-left: 50px;
+      left: 50%;
+    }
+
+    .tl-dot {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background-color: #c9a87c;
+      border: 3px solid #3d2b1a;
+      border-radius: 50%;
+      top: 20px;
+      z-index: 2;
+    }
+
+    .tl-left .tl-dot {
+      right: -8px;
+    }
+
+    .tl-right .tl-dot {
+      left: -8px;
+    }
+
+    .tl-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(201, 168, 124, 0.35);
+      border-radius: 12px;
+      overflow: hidden;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .tl-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+    }
+
+    .tl-photo-placeholder {
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(201, 168, 124, 0.2);
+      background: linear-gradient(135deg, rgba(80, 55, 35, 0.6), rgba(50, 30, 15, 0.8));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tl-photo-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    /* PNG图片竖版/方形，用contain完整展示 */
+    .tl-photo-png img {
+      object-fit: contain;
+      padding: 12px;
+    }
+
+    .tl-card:hover .tl-photo-placeholder img {
+      transform: scale(1.05);
+    }
+
+    .tl-body {
+      padding: 16px 20px 20px;
+    }
+
+    .tl-year {
+      display: inline-block;
+      background-color: rgba(180, 76, 58, 0.75);
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border-radius: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .tl-body h3 {
+      font-size: 1.05rem;
+      color: #2c1a0e;
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .tl-body p {
+      font-size: 0.85rem;
+      color: #5a3e2b;
+      line-height: 1.7;
+    }
+
+    /* ===== 页脚 ===== */
+    .footer {
+      background: linear-gradient(135deg, #2c1a0e, #3d2b1a);
+      color: #c9a87c;
+      padding: 60px 0 0;
+      margin-top: 80px;
+      display: flex;
+      flex-direction:column;
+      border-bottom: 1px solid rgba(248, 236, 221, 0.2);
+    }
+
+    .footer-inner {
+      width: 90%;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr ;
+      gap: 100px;
+      padding-bottom: 50px;
+      
+    }
+
+    .footer-brand img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      background-color: #c9a87c;
+      margin-bottom: 10px;
+    }
+
+    .footer-brand span {
+      display: block;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #e8e2d4;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .footer-brand p {
+      font-size: 0.82rem;
+      color: #a08060;
+      line-height: 1.8;
+    }
+    
+
+    .footer-links h4{
+      font-size: 0.95rem;
+      color: #e8e2d4;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(201, 168, 124, 0.25);
+    }
+
+    .footer-links a {
+      display: block;
+      color: #a08060;
+      text-decoration: none;
+      font-size: 0.83rem;
+      margin-bottom: 10px;
+      transition: color 0.3s;
+      letter-spacing: 1px;
+    }
+
+    .footer-links a:hover {
+      color: #c9a87c;
+      padding-left: 4px;
+    }
+    .footer-contact h4 {
+      font-size: 0.95rem;
+      color: #e8e2d4;
+      letter-spacing: 2px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(201, 168, 124, 0.25);
+    }
+    .footer-contact p {
+      display: block;
+      color: #a08060;
+      text-decoration: none;
+      font-size: 0.83rem;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+  
+    }
+    .footer-bottom {
+      text-align: center;
+      padding: 18px 20px;
+      font-size: 0.78rem;
+      color: #a08060;
+      letter-spacing: 1px;
+      margin: 0;
+      background: linear-gradient(135deg, #2c1a0e, #3d2b1a);
+    }
+    
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .box1 {
+        padding: 0 16px;
+      }
+
+      .timeline::before {
+        left: 20px;
+      }
+
+      .tl-item {
+        width: 100%;
+        left: 0;
+        padding-left: 50px;
+        padding-right: 0;
+        justify-content: flex-start;
+      }
+
+      .tl-left {
+        padding-right: 0;
+        padding-left: 50px;
+        justify-content: flex-start;
+      }
+
+      .tl-left .tl-dot,
+      .tl-right .tl-dot {
+        left: 12px;
+        right: auto;
+      }
+
+      .footer-inner {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .footer-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .section-title {
+        font-size: 1.4rem;
+      }
+     
+    }
+    .foot2{
+      height: 60px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 导航栏 -->
+  <div class="box1">
+    <div class="logo">
+      <img src="./图片/logo.png" alt="云赏非遗">
+      <span>云赏非遗</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#" class="nav-item">主页</a>
+      <a href="./3D地图/indext.html" class="nav-item">3D地图</a>
+      <div class="dropdown">
+        <a href="javascript:;" class="nav-item dropdown-toggle">项目展览</a>
+    <div class="dropdown-menu">
+      <a href="./3d光球.html" class="dropdown-item">3D粒子系统</a>
+      <a href="./3D照片墙/index.html" class="dropdown-item">照片博物馆</a>
+    </div>
+  </div>
+      <a href="./非遗论坛/index.html" class="nav-item">非遗论坛</a>
+      <a href="./ai/ai.html" class="nav-item">AI助手</a>
+    </nav>
+    
+    <div class="user-area">
+      <div class="user-avatar"  onclick="goMyPage()">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <div class="user-info">
+        <span class="username">非遗传承人</span>
+        <span class="user-status">已登录</span>
+      </div>
+      <a href="./个人主页/index.html" class="login-btn">登录/注册</a>
+    </div>
+  </div>
+
+  <!-- 右侧浮动菜单 -->
+  <div class="side-menu-trigger" id="sideMenuTrigger">
+    <i class="fa-solid fa-bars-staggered"></i>
+  </div>
+  <div class="side-menu" id="sideMenu">
+    <a href="./游戏/game.html" class="side-item"><i class="fa-solid fa-house"></i><span>非遗消消乐</span></a>
+    <a href="./游戏/game2.html" class="side-item"><i class="fa-solid fa-images"></i><span>非遗华容道</span></a>
+    <a href="./游戏/game3.html" class="side-item"><i class="fa-solid fa-person"></i><span>非遗大富翁</span></a>
+    <a href="#footer" class="side-item"><i class="fa-solid fa-address-card"></i><span>关于我们</span></a>
+  </div>
+
+  <!-- 轮播图 -->
+  <div class="slider">
+    <ul class="imges">
+      <li class="img"><img src="./图片/打铁花.jpg" alt="打铁花"></li>
+      <li class="img"><img src="./图片/皮影戏.jpg" alt="皮影戏"></li>
+      <li class="img"><img src="./图片/英歌.jpg" alt="英歌"></li>
+      <li class="img"><img src="./图片/灯笼.jpg" alt="灯笼"></li>
+    </ul>
+    <ul class="min">
+      <li class="m"></li>
+      <li class="m"></li>
+      <li class="m"></li>
+      <li class="m"></li>
+    </ul>
+    <div class="buttom">
+      <div class="buttom-left">&#8249;</div>
+      <div class="buttom-right">&#8250;</div>
+    </div>
+  </div>
+  <div class="foot2 "id="foot2"></div>
+  <div class="ziti" id="ziti"><h2>四大名绣</h2></div>
+  <div class="section-sub">经纬织天地，针缕贯古今。苏绣清雅、湘绣雄奇、粤绣富丽、蜀绣精巧，四大名绣承华夏文脉，以千年匠心绣绘山河万里，尽显东方锦绣的磅礴气度与不朽风华。</div>
+  <!-- 3D 旋转展示 -->
+  <div class="shell" id="shell">
+    <div class="content">
+      <div class="item" style="background-image:url('./图片/粤绣.jpg')"></div>
+      <div class="item" style="background-image:url('./图片/苏绣.jpg')"></div>
+      <div class="item" style="background-image:url('./图片/湘绣.jpg')"></div>
+      <div class="item" style="background-image:url('./图片/蜀绣.jpg')"></div>
+    </div>
+  </div>
+
+  <!-- 非遗时间轴 -->
+  <section class="timeline-section" id="timeline">
+    <h2 class="section-title">非遗传承时间轴</h2>
+    <p class="section-sub">千年技艺，薪火相传</p>
+    <div class="timeline">
+      <div class="tl-item tl-left">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-photo-placeholder tl-photo-png">
+            <img src="./图片/先秦.png" alt="先秦时期">
+          </div>
+          <div class="tl-body">
+            <span class="tl-year">先秦时期</span>
+            <h3>礼乐文化起源</h3>
+            <p>礼乐制度确立，宫廷雅乐、祭祀舞蹈等非遗形式初步形成，奠定中华传统文化根基。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item tl-right">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-photo-placeholder">
+            <img src="./图片/丝绸之路.jpg" alt="汉唐盛世">
+          </div>
+          <div class="tl-body">
+            <span class="tl-year">汉唐盛世</span>
+            <h3>丝路技艺交融</h3>
+            <p>丝绸之路开通，刺绣、陶瓷、乐器制作等技艺随贸易往来广泛传播，形成独特的汉唐风格。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item tl-left">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-photo-placeholder tl-photo-png">
+            <img src="./图片/宋.png" alt="宋元时期">
+          </div>
+          <div class="tl-body">
+            <span class="tl-year">宋元时期</span>
+            <h3>民间技艺繁荣</h3>
+            <p>市井文化兴盛，皮影戏、杂技、木版年画等民间艺术蓬勃发展，非遗走入寻常百姓家。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item tl-right">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-photo-placeholder tl-photo-png">
+            <img src="./图片/清.png" alt="明清时期">
+          </div>
+          <div class="tl-body">
+            <span class="tl-year">明清时期</span>
+            <h3>工艺集大成</h3>
+            <p>景德镇瓷器、苏绣、徽州木雕等工艺达到历史高峰，形成各地独具特色的非遗体系。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item tl-left">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-photo-placeholder tl-photo-png">
+            <img src="./图片/传承与保护.jpg" alt="近现代">
+          </div>
+          <div class="tl-body">
+            <span class="tl-year">近现代</span>
+            <h3>保护与传承并举</h3>
+            <p>新中国成立后，国家开始系统整理民间技艺，非遗保护工作逐步走向制度化、规范化。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item tl-right">
+        <div class="tl-dot"></div>
+        <div class="tl-card">
+          <div class="tl-photo-placeholder tl-photo-png">
+            <img src="./图片/传承.png" alt="数字传承">
+          </div>
+          <div class="tl-body">
+            <span class="tl-year">2006年至今</span>
+            <h3>国家级非遗名录建立</h3>
+            <p>中国正式建立国家级非物质文化遗产名录体系，目前已有1557项入选，数字化传承全面推进。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="footer" id="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="./图片/tu1.jpg" alt="云赏非遗">
+        <span>云赏非遗</span>
+        <p>非遗活态传承数字平台<br>让传统文化在数字时代焕发新生</p>
+      </div>
+      <div class="footer-links">
+        <h4>快速导航</h4>
+        <a href="#">首页</a>
+        <a href="#foot2">项目展览</a>
+        <a href="#timeline">非遗时间轴</a>
+      </div>
+       <div class="footer-contact">
+        <h4>关于我们</h4>
+        <p>平台介绍</p>
+        <p>加入我们</p>
+        <p>联系我们</p>
+      </div>
+  </footer>
+  <div class="footer-bottom">
+         <p>&nbsp; 非遗活态传承数字平台 &nbsp;|&nbsp; 保护传统文化，传承民族精神</p>
+      </div>
+  <script>
+    // ===== 轮播图 =====
+    // .imges 宽400%，每张占25%；translateX(-25%) = 移动一张图的距离
+    const btnLeft = document.querySelector('.buttom-left');
+    const btnRight = document.querySelector('.buttom-right');
+    const dots = document.querySelectorAll('.m');
+    const imges = document.querySelector('.imges');
+    const total = dots.length; // 4
+    let idx = 0, sliderTimer;
+
+    function slideTo(i) {
+      idx = (i + total) % total;
+      imges.style.transform = `translateX(${idx * -25}%)`;
+      dots.forEach((d, n) => d.classList.toggle('active', n === idx));
+    }
+
+    function startSlider() {
+      clearInterval(sliderTimer);
+      sliderTimer = setInterval(() => slideTo(idx + 1), 3000);
+    }
+
+    btnLeft.addEventListener('click', () => { slideTo(idx - 1); startSlider(); });
+    btnRight.addEventListener('click', () => { slideTo(idx + 1); startSlider(); });
+    dots.forEach((d, i) => d.addEventListener('click', () => { slideTo(i); startSlider(); }));
+
+    slideTo(0);
+    startSlider();
+    // 页面加载时获取用户信息
+
+    // ===== 用户登录状态 =====
+    const userArea = document.querySelector('.user-area');
+    const loginBtn = document.querySelector('.login-btn');
+    const isLoggedIn = true; // 改为 true 查看已登录效果
+
+    userArea.classList.toggle('logged-in', isLoggedIn);
+    userArea.classList.toggle('logged-out', !isLoggedIn);
+
+    loginBtn?.addEventListener('click', () => {
+      window.location.href = './login.html';
+    });
+   
+    // ===== 下拉框 =====
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+    dropdownToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      dropdownMenu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.dropdown')) {
+        dropdownMenu.classList.remove('show');
+      }
+    });
+
+    // ===== 右侧悬浮菜单 =====
+    const trigger = document.getElementById('sideMenuTrigger');
+    const sideMenu = document.getElementById('sideMenu');
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sideMenu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!sideMenu.contains(e.target) && !trigger.contains(e.target)) {
+        sideMenu.classList.remove('open');
+      }
+    });
+
+    // 点击菜单项后自动关闭
+    document.querySelectorAll('.side-item').forEach(item => {
+      item.addEventListener('click', () => sideMenu.classList.remove('open'));
+    });
+
+    // ===== 时间轴滚动入场动画 =====
+    const tlItems = document.querySelectorAll('.tl-item');
+
+    tlItems.forEach(item => {
+      item.style.opacity = '0';
+      item.style.transform = 'translateY(40px)';
+      item.style.transition = 'opacity 0.65s ease, transform 0.65s ease';
+    });
+
+    const tlObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          tlObserver.unobserve(entry.target); // 动画只触发一次
+        }
+      });
+    }, { threshold: 0.15 });
+
+    tlItems.forEach(item => tlObserver.observe(item));
+
+    // ===== 导航栏滚动变色 =====
+    const navbar = document.querySelector('.box1');
+
+    window.addEventListener('scroll', () => {
+      navbar.style.backgroundColor = window.scrollY > 60
+        ? 'rgba(40, 25, 12, 0.97)'
+        : 'rgba(100, 75, 55, 0.85)';
+    }, { passive: true });
+   initUser();
+// 加载用户信息，自动显示头像
+async function loadUser() {
+  const user = await fetch('/api/user').then(r => r.json())
+  if (!user) return
+
+  const userArea = document.querySelector('.user-area')
+  userArea.classList.add('logged-in')
+  userArea.classList.remove('logged-out')
+
+  // 赋值头像和名字
+  document.querySelector('.user-avatar img').src = user.avatar
+  document.querySelector('.username').innerText = user.name
+
+  // 点击头像 → 进入个人主页
+  userArea.onclick = function () {
+    location.href = './个人主页/index.html'
+  }
+}
+loadUser() 
+// 点头像跳个人主页
+function goMyPage() {
+  location.href = "./个人主页/index.html";
+}
+
+  </script>
+</body>
+
+</html>

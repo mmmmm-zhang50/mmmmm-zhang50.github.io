@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>非遗文化论坛</title>
+  <link rel="stylesheet" href="./my.css">
+</head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<body>
+   <!-- 导航栏 -->
+  <div class="box1">
+    <div class="logo">
+      <img src="../图片/logo.png" alt="云赏非遗">
+      <span>云赏非遗</span>
+    </div>
+    <nav class="nav-links">
+      <a href="../主页.html" class="nav-item">主页</a>
+      <a href="../3D地图/indext.html" class="nav-item">3D地图</a>
+      <div class="dropdown">
+        <a href="javascript:;" class="nav-item dropdown-toggle">项目展览</a>
+    <div class="dropdown-menu">
+      <a href="../3d光球.html" class="dropdown-item">3D粒子系统</a>
+      <a href="../3D照片墙/index.html" class="dropdown-item">照片博物馆</a>
+    </div>
+  </div>
+      <a href="../非遗论坛/index.html" class="nav-item">非遗论坛</a>
+      <a href="../ai/ai.html" class="nav-item">AI助手</a>
+    </nav>
+    
+    <div class="user-area">
+      <div class="user-avatar" onclick="goMyPage()">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <div class="user-info">
+        <span class="username">非遗传承人</span>
+        <span class="user-status">已登录</span>
+      </div>
+      <a href="../个人主页/index.html" class="login-btn">登录/注册</a>
+    </div>
+  </div>
+
+  <!-- 右侧浮动菜单 -->
+  <div class="side-menu-trigger" id="sideMenuTrigger">
+    <i class="fa-solid fa-bars-staggered"></i>
+  </div>
+  <div class="side-menu" id="sideMenu">
+    <a href="../游戏/game.html" class="side-item"><i class="fa-solid fa-house"></i><span>非遗消消乐</span></a>
+    <a href="../游戏/game2.html" class="side-item"><i class="fa-solid fa-images"></i><span>非遗华容道</span></a>
+    <a href="../游戏/game3.html" class="side-item"><i class="fa-solid fa-person"></i><span>非遗大富翁</span></a>
+    <a href="#footer" class="side-item"><i class="fa-solid fa-address-card"></i><span>关于我们</span></a>
+  </div>
+<div class="circle-wrap">
+  <div class="circle">
+    <div class="half-left"></div>
+    <div class="half-right"></div>
+  </div>
+</div>
+  <!-- 左右图片 -->
+  <div class="left-image"></div>
+  <div class="right-image"></div>
+  <!-- 论坛主体 -->
+  <div class="container">
+    <h2 class="forum-title">非遗文化讨论区</h2>
+
+    <!-- 发布帖子 -->
+    <div class="post-box">
+      <input type="text" id="nameInput" placeholder="请输入你的昵称" class="name-input">
+      <textarea id="contentInput" placeholder="快来分享你对非遗文化的见解、故事与传承吧～"></textarea>
+      <button class="post-btn" id="publishBtn">发布</button>
+    </div>
+
+    <!-- 帖子列表 -->
+    <div class="post-list" id="postList">
+      <div class="empty-tip">暂无帖子，快来发表第一条评论吧～</div>
+    </div>
+    <!-- 非遗资料固定底部栏 -->
+    <div class="intangible-heritage-footer">
+      <div class="footer-title">非遗相关资料</div>
+      <div class="footer-links">
+        <a href="https://www.pishu.com.cn/skwx_ps/bookdetail?SiteID=14&ID=15457178" target="_blank">非遗保护研究报告</a>
+        <a href="http://www.npc.gov.cn/zgrdw/npc/////////xinwen/2011-02/25/content_1625677.htm"
+          target="_blank">非遗法官方定义</a>
+        <a href="https://www.gov.cn/gongbao/content/2021/content_5633447.htm" target="_blank">非遗传承发展白皮书</a>
+        <a href="https://www.gov.cn/zhengce/zhengceku/2021-06/10/content_5616457.htm"
+          target="_blank">第五批国家级非遗名录（国务院）</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="./my.js"></script>
+</body>
+
+</html>

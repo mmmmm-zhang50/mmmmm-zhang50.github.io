@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>非遗主题个人主页</title>
+  <!-- 引入外部CSS -->
+  <link rel="stylesheet" href="my.css">
+</head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<body>
+  <!-- 导航栏 -->
+  <div class="box1">
+    <div class="logo">
+      <img src="../图片/logo.png" alt="云赏非遗">
+      <span>云赏非遗</span>
+    </div>
+    <nav class="nav-links">
+      <a href="../主页.html" class="nav-item">主页</a>
+      <a href="../3D地图/indext.html" class="nav-item">3D地图</a>
+      <div class="dropdown">
+        <a href="javascript:;" class="nav-item dropdown-toggle">项目展览</a>
+    <div class="dropdown-menu">
+      <a href="../3d光球.html" class="dropdown-item">3D粒子系统</a>
+      <a href="../3D照片墙/index.html" class="dropdown-item">照片博物馆</a>
+    </div>
+  </div>
+      <a href="../非遗论坛/index.html" class="nav-item">非遗论坛</a>
+      <a href="../ai/ai.html" class="nav-item">AI助手</a>
+    </nav>
+    
+    <div class="user-area">
+      <div class="user-avatar">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <div class="user-info">
+        <span class="username">非遗传承人</span>
+        <span class="user-status">已登录</span>
+      </div>
+      <a href="../个人主页/index.html" class="login-btn">登录/注册</a>
+    </div>
+  </div>
+
+  <!-- 右侧浮动菜单 -->
+  <div class="side-menu-trigger" id="sideMenuTrigger">
+    <i class="fa-solid fa-bars-staggered"></i>
+  </div>
+  <div class="side-menu" id="sideMenu">
+    <a href="../游戏/game.html" class="side-item"><i class="fa-solid fa-house"></i><span>非遗消消乐</span></a>
+    <a href="../游戏/game2.html" class="side-item"><i class="fa-solid fa-images"></i><span>非遗华容道</span></a>
+    <a href="../游戏/game3.html" class="side-item"><i class="fa-solid fa-person"></i><span>非遗大富翁</span></a>
+    <a href="#footer" class="side-item"><i class="fa-solid fa-address-card"></i><span>关于我们</span></a>
+  </div>
+<div class="circle-wrap">
+  <div class="circle">
+    <div class="half-left"></div>
+    <div class="half-right"></div>
+  </div>
+</div>
+  <div class="wrap">
+    <!-- 左侧：头像 + 昵称 + 签名 -->
+    <div class="left-box">
+      <div class="title-box">
+        <div class="page-title">个人主页</div>
+      </div>
+      <div class="avatar-name-container">
+        <div class="avatar-area">
+          <img class="avatar" id="avatarImg" src="https://picsum.photos/seed/cartoon/200/200">
+          <input type="file" class="avatar-upload" id="avatarUp" accept="image/*">
+        </div>
+        <input type="text" class="name-input" id="userName" placeholder="输入你的昵称">
+      </div>
+      <div class="sign-container">
+        <textarea class="sign-text" id="userSign" placeholder="请写下你的签名" rows="3"></textarea>
+      </div>
+    </div>
+
+    <!-- 右侧：时间天气 + 信息编辑面板 -->
+    <div class="right-box">
+      <!-- 时间卡片 -->
+      <div class="time-weather-card">
+        <div class="weather-content">
+          <div class="date-info" id="dateBox">2026年04月19日 星期日</div>
+          <div class="time-num" id="timeBox">00:00:00</div>
+        </div>
+        <div class="weather-image">
+          <img src="./img/img-01.jpg" alt="天气图片">
+        </div>
+      </div>
+
+      <!-- 信息编辑面板 -->
+      <div class="info-panel">
+        <div class="info-item">
+          <div class="info-title">喜欢的非遗</div>
+          <input type="text" class="info-input" id="likeFeiYi" placeholder="蜀绣 / 剪纸 / 皮影">
+        </div>
+        <div class="info-item">
+          <div class="info-title">昵称</div>
+          <input type="text" class="info-input" id="editNick" placeholder="填写昵称">
+        </div>
+        <div class="info-item">
+          <div class="info-title">手机号</div>
+          <input type="text" class="info-input" id="editPhone" placeholder="填写手机号">
+        </div>
+        <div class="info-item">
+          <div class="info-title">邮箱</div>
+          <input type="text" class="info-input" id="editEmail" placeholder="填写邮箱">
+        </div>
+        <div class="info-item">
+          <div class="info-title">地址</div>
+          <div class="address-select-container">
+            <select class="info-input address-select" id="editProvince" onchange="updateCities()">
+              <option value="">选择省份</option>
+            </select>
+            <select class="info-input address-select" id="editCity">
+              <option value="">选择城市</option>
+            </select>
+          </div>
+        </div>
+        <button class="save-btn" onclick="saveAllData()">保存</button>
+      </div>
+    </div>
+
+    <!-- 底部文案 -->
+    <div class="footer-words">以匠心守非遗，以古韵续华章</div>
+  </div>
+
+  <!-- 引入外部JS -->
+  <script src="my.js"></script>
+</body>
+
+</html>

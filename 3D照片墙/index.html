@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D照片墙</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+       body {
+        overflow-x: hidden;
+        background-image: url(./img111.jpg);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+       background-attachment: fixed;
+    }
+    .zhanwei{
+      width: 100%;
+      height: 80px;
+    }
+     /* ===== 导航栏 ===== */
+    .box1 {
+      height: 70px;
+      width: 100%;
+      background-color: rgba(100, 75, 55, 0.85);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      border-bottom: 1px solid rgba(201, 168, 124, 0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+
+    .logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      background-color: #c9a87c;
+    }
+
+    .logo span {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #e8e2d4;
+      letter-spacing: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-item {
+      width: 100px;
+      text-align: center;
+      color: #e8e2d4;
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 6px 18px;
+      border-radius: 20px;
+      transition: all 0.3s;
+      letter-spacing: 1px;
+    }
+
+    .nav-item:hover {
+      background-color: rgba(180, 76, 58, 0.8);
+      color: #fff;
+    }
+
+    .user-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid #c9a87c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c9a87c;
+      font-size: 1rem;
+      overflow: hidden;
+    }
+
+    .user-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+
+    .username {
+      font-size: 0.82rem;
+      font-weight: bold;
+      color: #e8e2d4;
+    }
+
+    .user-status {
+      font-size: 0.62rem;
+      color: #c9a87c;
+    }
+
+    .login-btn {
+      background-color: #b44c3a;
+      color: #fff;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+
+    .login-btn:hover {
+      background-color: #9e3a2a;
+      transform: translateY(-2px);
+    }
+
+    .user-area.logged-out .user-avatar,
+    .user-area.logged-out .user-info {
+      display: none;
+    }
+
+    .user-area.logged-in .login-btn {
+      display: none;
+    }
+
+    /* 下拉框容器 */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-toggle {
+      cursor: pointer;
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 160px;
+      background: rgba(139, 109, 44, 0.7); /* 古铜金色，70%不透明，有通透感 */
+      backdrop-filter: blur(8px); /* 毛玻璃效果 */
+      -webkit-backdrop-filter: blur(8px); /* 兼容 Safari */
+      border: 1px solid rgba(212, 175, 55, 0.6);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 999;
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .dropdown-item {
+      display: block;
+      padding: 10px 16px;
+      color: #fff; /* 白色字，在金底色上清晰 */
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    .dropdown-item:hover {
+      background: rgba(212, 175, 55, 0.3);
+      color: #f1d592;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+    /* ===== 右侧悬浮菜单 ===== */
+    .side-menu-trigger {
+      position: fixed;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 80px;
+      background-color: rgba(100, 75, 55, 0.85);
+      backdrop-filter: blur(8px);
+      border-radius: 8px 0 0 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1100;
+      color: #c9a87c;
+      font-size: 1.1rem;
+      box-shadow: -3px 0 15px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s;
+    }
+
+    .side-menu-trigger:hover {
+      background-color: rgba(180, 76, 58, 0.9);
+    }
+
+    .side-menu {
+      position: fixed;
+      right: -130px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 120px;
+      background-color: rgba(60, 40, 25, 0.92);
+      backdrop-filter: blur(12px);
+      border-radius: 10px 0 0 10px;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 0;
+      z-index: 1099;
+      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.4);
+      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(201, 168, 124, 0.2);
+      border-right: none;
+    }
+
+    .side-menu.open {
+      right: 0;
+    }
+
+    .side-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 0;
+      color: #c9a87c;
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      transition: all 0.25s;
+      border-bottom: 1px solid rgba(201, 168, 124, 0.1);
+    }
+
+    .side-item:last-child {
+      border-bottom: none;
+    }
+
+    .side-item i {
+      font-size: 1.1rem;
+    }
+
+    .side-item:hover {
+      background-color: rgba(180, 76, 58, 0.6);
+      color: #fff;
+    }
+
+
+        .main-title {
+            text-align: center;
+            font-size: 5.5rem;
+            color: #ebc342;
+            letter-spacing: 4px;
+            margin-bottom: 8px;
+            margin-top: 70px;
+            font-family: "Noto Serif SC", "Lora", serif;
+        }
+
+        .drag-area {
+            width: 100vw;
+            height: calc(100vh - 210px);
+            perspective: 2500px;
+            overflow: hidden;
+            cursor: grab;
+        }
+        .drag-area:active {
+            cursor: grabbing;
+        }
+
+        .photo-track {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            gap: 85px;
+            padding: 0 16vw;
+            transform-style: preserve-3d;
+            transition: none;
+        }
+
+        .photo-card {
+            width: 220px;
+            height: 300px;
+            flex-shrink: 0;
+            padding: 16px;
+            background: #ede4d9;
+            border: 5px solid var(--brown-main);
+            border-radius: 8px;
+            transform-style: preserve-3d;
+            box-shadow: 
+                0 40px 90px rgba(0,0,0,0.9),
+                0 80px 160px rgba(12,7,3,0.6);
+            transition: transform 0.3s ease;
+            pointer-events: auto;
+            cursor: pointer;
+            will-change: transform;
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+            filter: contrast(1.2) saturate(0.78);
+            pointer-events: none;
+        }
+
+        /* 悬停：轻微小幅度放大 */
+        .photo-card:hover {
+            transform: translateY(var(--ty)) translateZ(var(--tz)) scale(1.05);
+        }
+
+        /* 点击激活：只再微微放大，不改变位置、不居中、不浮动 */
+        .photo-card.active {
+            transform: translateY(var(--ty)) translateZ(var(--tz)) scale(1.1);
+        }
+
+        /* 每张独立Y、Z 变量，hover/点击复用，位置绝不乱跑 */
+        .c1  { --ty:-180px; --tz:-580px; transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c2  { --ty:160px;  --tz:-300px; transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c3  { --ty:-60px;  --tz:330px;  transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c4  { --ty:190px;  --tz:-480px; transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c5  { --ty:-220px; --tz:-160px; transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c6  { --ty:120px;  --tz:360px;  transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c7  { --ty:-90px;  --tz:-390px; transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c8  { --ty:170px;  --tz:-120px; transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c9  { --ty:-200px; --tz:290px;  transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c10 { --ty:80px;   --tz:-530px; transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c11 { --ty:-110px; --tz:-220px; transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c12 { --ty:210px;  --tz:340px;  transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c13 { --ty:-150px; --tz:-600px; transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c14 { --ty:50px;   --tz:-140px; transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c15 { --ty:-70px;  --tz:310px;  transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c16 { --ty:185px;  --tz:-430px; transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c17 { --ty:-210px; --tz:-190px; transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c18 { --ty:95px;   --tz:320px;  transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c19 { --ty:-130px; --tz:-450px; transform: translateY(var(--ty)) translateZ(var(--tz)); }
+        .c20 { --ty:140px;  --tz:270px;  transform: translateY(var(--ty)) translateZ(var(--tz)); }
+
+        /* 中央预览蒙层 3/4屏幕卡片 */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.85);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        .preview-card {
+            width: 75vw;
+            height: 75vh;
+            padding: 20px;
+            background: #ede4d9;
+            border: 6px solid var(--brown-main);
+            border-radius: 12px;
+        }
+        .preview-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+  <div class="box1">
+    <div class="logo">
+      <img src="../图片/logo.png" alt="云赏非遗">
+      <span>云赏非遗</span>
+    </div>
+    <nav class="nav-links">
+      <a href="../主页.html" class="nav-item">主页</a>
+      <a href="../3D地图/indext.html" class="nav-item">3D地图</a>
+      <div class="dropdown">
+        <a href="javascript:;" class="nav-item dropdown-toggle">项目展览</a>
+    <div class="dropdown-menu">
+      <a href="../3d光球.html" class="dropdown-item">3D粒子系统</a>
+      <a href="../3D照片墙/index.html" class="dropdown-item">照片博物馆</a>
+    </div>
+  </div>
+      <a href="../非遗论坛/index.html" class="nav-item">非遗论坛</a>
+      <a href="../ai/ai.html" class="nav-item">AI助手</a>
+    </nav>
+    
+    <div class="user-area">
+      <div class="user-avatar" onclick="goMyPage()">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <div class="user-info">
+        <span class="username">非遗传承人</span>
+        <span class="user-status">已登录</span>
+      </div>
+      <a href="../个人主页/index.html" class="login-btn">登录/注册</a>
+    </div>
+  </div>
+
+  <!-- 右侧浮动菜单 -->
+  <div class="side-menu-trigger" id="sideMenuTrigger">
+    <i class="fa-solid fa-bars-staggered"></i>
+  </div>
+  <div class="side-menu" id="sideMenu">
+    <a href="../游戏/game.html" class="side-item"><i class="fa-solid fa-house"></i><span>非遗消消乐</span></a>
+    <a href="../游戏/game2.html" class="side-item"><i class="fa-solid fa-images"></i><span>非遗华容道</span></a>
+    <a href="../游戏/game3.html" class="side-item"><i class="fa-solid fa-person"></i><span>非遗大富翁</span></a>
+    <a href="#footer" class="side-item"><i class="fa-solid fa-address-card"></i><span>关于我们</span></a>
+  </div>
+  
+<div class="circle-wrap">
+  <div class="circle">
+    <div class="half-left"></div>
+    <div class="half-right"></div>
+  </div>
+</div>
+<div class="zhamwei"></div>
+    <h1 class="main-title">非遺古韻,匠藝永傳</h1>
+
+    <div class="drag-area" id="dragArea">
+        <div class="photo-track" id="moveTrack">
+            <div class="photo-card c1"><img src="./imges/t1.jpeg"></div>
+            <div class="photo-card c2"><img src="./imges/t2.jpg"></div>
+            <div class="photo-card c3"><img src="./imges/t3.jpg"></div>
+            <div class="photo-card c4"><img src="./imges/t4.jpg"></div>
+            <div class="photo-card c5"><img src="./imges/t5.jpg"></div>
+            <div class="photo-card c6"><img src="./imges/t6.jpg"></div>
+            <div class="photo-card c7"><img src="./imges/t7.jpg"></div>
+            <div class="photo-card c8"><img src="./imges/t8.jpg"></div>
+            <div class="photo-card c9"><img src="./imges/t9.jpg"></div>
+            <div class="photo-card c10"><img src="./imges/t10.jpg"></div>
+            <div class="photo-card c11"><img src="./imges/t11.jpg"></div>
+            <div class="photo-card c12"><img src="./imges/t12.jpg"></div>
+            <div class="photo-card c13"><img src="./imges/t13.jpg"></div>
+            <div class="photo-card c14"><img src="./imges/t14.jpg"></div>
+            <div class="photo-card c15"><img src="./imges/t15.jpg"></div>
+            <div class="photo-card c16"><img src="./imges/t16.jpg"></div>
+            <div class="photo-card c17"><img src="./imges/t17.jpg"></div>
+            <div class="photo-card c18"><img src="./imges/t18.jpg"></div>
+            <div class="photo-card c19"><img src="./imges/t19.jpg"></div>
+            <div class="photo-card c20"><img src="./imges/t20.jpg"></div>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay">
+        <div class="preview-card">
+            <img id="previewImg" src="" alt="放大预览">
+        </div>
+    </div>
+
+<script>
+ // ===== 用户登录状态 =====
+    const userArea = document.querySelector('.user-area');
+    const loginBtn = document.querySelector('.login-btn');
+    const isLoggedIn = true; // 改为 true 查看已登录效果
+
+    userArea.classList.toggle('logged-in', isLoggedIn);
+    userArea.classList.toggle('logged-out', !isLoggedIn);
+
+    loginBtn?.addEventListener('click', () => {
+      window.location.href = './login.html';
+    });
+   
+    // ===== 下拉框 =====
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+    dropdownToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      dropdownMenu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.dropdown')) {
+        dropdownMenu.classList.remove('show');
+      }
+    });
+
+    // ===== 右侧悬浮菜单 =====
+    const trigger = document.getElementById('sideMenuTrigger');
+    const sideMenu = document.getElementById('sideMenu');
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sideMenu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!sideMenu.contains(e.target) && !trigger.contains(e.target)) {
+        sideMenu.classList.remove('open');
+      }
+    });
+
+    // 点击菜单项后自动关闭
+    document.querySelectorAll('.side-item').forEach(item => {
+      item.addEventListener('click', () => sideMenu.classList.remove('open'));
+    });
+
+    const dragArea = document.getElementById('dragArea');
+    const moveTrack = document.getElementById('moveTrack');
+    const cardList = document.querySelectorAll('.photo-card');
+    const overlay = document.getElementById('overlay');
+    const previewImg = document.getElementById('previewImg');
+
+    let isHold = false;
+    let startMouseX = 0;
+    let currentPos = 0;
+
+    // 空白区域拖拽
+    dragArea.addEventListener('mousedown', (e) => {
+        
+        isHold = true;
+        startMouseX = e.clientX;
+    });
+    document.addEventListener('mousemove', (e) => {
+        if (!isHold) return;
+        const diff = e.clientX - startMouseX;
+        moveTrack.style.transform = `translateX(${currentPos + diff}px)`;
+    });
+    document.addEventListener('mouseup', () => {
+        if (!isHold) return;
+        isHold = false;
+        const val = moveTrack.style.transform;
+        const num = val.replace('translateX(','').replace('px)','');
+        currentPos = Number(num);
+    });
+
+    // 点击图片：本地轻微放大 + 弹出中央3/4预览卡片
+    cardList.forEach(card => {
+        card.addEventListener('click', () => {
+            // 只做轻微放大，位置完全不变
+            cardList.forEach(item => item.classList.remove('active'));
+            card.classList.add('active');
+
+            // 弹出独立预览卡片
+            const imgSrc = card.querySelector('img').src;
+            previewImg.src = imgSrc;
+            overlay.style.display = 'flex';
+        });
+    });
+
+    // 关闭预览
+    overlay.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        previewImg.src = "";
+    });
+ function goMyPage() {
+  location.href = "../个人主页/index.html";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>非遗大富翁·万里茶道</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+  }
+  html, body {
+    height: 100%;
+    background: url(./img.png);
+    background-size: cover;
+    background-position: center;
+    color: #5c2b11; /* 金红棕主色调 */
+  }
+  .zhanwei{
+      width: 100%;
+      height: 80px;
+    }
+           /* ===== 导航栏 ===== */
+    .box1 {
+      height: 70px;
+      width: 100%;
+      background-color: rgba(100, 75, 55, 0.85);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      border-bottom: 1px solid rgba(201, 168, 124, 0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+
+    .logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      background-color: #c9a87c;
+    }
+
+    .logo span {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #e8e2d4;
+      letter-spacing: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-item {
+      width: 100px;
+      text-align: center;
+      color: #e8e2d4;
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 6px 18px;
+      border-radius: 20px;
+      transition: all 0.3s;
+      letter-spacing: 1px;
+    }
+
+    .nav-item:hover {
+      background-color: rgba(180, 76, 58, 0.8);
+      color: #fff;
+    }
+
+    .user-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid #c9a87c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c9a87c;
+      font-size: 1rem;
+      overflow: hidden;
+    }
+
+    .user-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+
+    .username {
+      font-size: 0.82rem;
+      font-weight: bold;
+      color: #e8e2d4;
+    }
+
+    .user-status {
+      font-size: 0.62rem;
+      color: #c9a87c;
+    }
+
+    .login-btn {
+      background-color: #b44c3a;
+      color: #fff;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+
+    .login-btn:hover {
+      background-color: #9e3a2a;
+      transform: translateY(-2px);
+    }
+
+    .user-area.logged-out .user-avatar,
+    .user-area.logged-out .user-info {
+      display: none;
+    }
+
+    .user-area.logged-in .login-btn {
+      display: none;
+    }
+
+    /* 下拉框容器 */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-toggle {
+      cursor: pointer;
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 160px;
+      background: rgba(139, 109, 44, 0.7); /* 古铜金色，70%不透明，有通透感 */
+      backdrop-filter: blur(8px); /* 毛玻璃效果 */
+      -webkit-backdrop-filter: blur(8px); /* 兼容 Safari */
+      border: 1px solid rgba(212, 175, 55, 0.6);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 999;
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .dropdown-item {
+      display: block;
+      padding: 10px 16px;
+      color: #fff; /* 白色字，在金底色上清晰 */
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    .dropdown-item:hover {
+      background: rgba(212, 175, 55, 0.3);
+      color: #f1d592;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+    /* ===== 右侧悬浮菜单 ===== */
+    .side-menu-trigger {
+      position: fixed;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 80px;
+      background-color: rgba(100, 75, 55, 0.85);
+      backdrop-filter: blur(8px);
+      border-radius: 8px 0 0 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1100;
+      color: #c9a87c;
+      font-size: 1.1rem;
+      box-shadow: -3px 0 15px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s;
+    }
+
+    .side-menu-trigger:hover {
+      background-color: rgba(180, 76, 58, 0.9);
+    }
+
+    .side-menu {
+      position: fixed;
+      right: -130px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 120px;
+      background-color: rgba(60, 40, 25, 0.92);
+      backdrop-filter: blur(12px);
+      border-radius: 10px 0 0 10px;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 0;
+      z-index: 1099;
+      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.4);
+      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(201, 168, 124, 0.2);
+      border-right: none;
+    }
+
+    .side-menu.open {
+      right: 0;
+    }
+
+    .side-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 0;
+      color: #c9a87c;
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      transition: all 0.25s;
+      border-bottom: 1px solid rgba(201, 168, 124, 0.1);
+    }
+
+    .side-item:last-child {
+      border-bottom: none;
+    }
+
+    .side-item i {
+      font-size: 1.1rem;
+    }
+
+    .side-item:hover {
+      background-color: rgba(180, 76, 58, 0.6);
+      color: #fff;
+    }
+
+  /* 音乐按钮 */
+  .music-btn {
+    margin-top: 70px;
+    margin-left: 15px;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 9999;
+  }
+  .music-btn.rotating {
+    animation: rotate 6s linear infinite;
+  }
+  @keyframes rotate {
+    100% { transform: rotate(360deg); }
+  }
+
+  /* 再来一把 */
+  #restartBtn {
+    margin-top: 70px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 8px 18px;
+    background: #92400e;
+    color: #fff;
+    border: 1px solid #d4a066;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: "STXingkai", serif;
+    cursor: pointer;
+    z-index: 9999;
+  }
+  #restartBtn:hover {
+    background: #b45309;
+  }
+
+  .wrap {
+    width: 100%;
+    height: 100vh;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  /* 标题 */
+  .title {
+    text-align: center;
+    font-size: 42px;
+    font-weight: 900;
+    color: #1f0c01;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    font-family: "STXingkai", serif;
+  }
+
+  .game-box {
+    flex: 1;
+    position: relative;
+  }
+
+  /* 路线画布 */
+  #routeCanvas {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .grid {
+    position: relative;
+    width: 100%; height: 100%;
+    z-index: 2;
+  }
+
+  /* 格子 - 金红棕质感 */
+  .cell {
+    position: absolute;
+    width: 16%; height: 15%;
+    border-radius: 50% / 55%;
+    background: linear-gradient(145deg, #faf3e9, #f2e6d5);
+    border: 2px solid #d4a066;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    font-size: 16px;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 3px 8px rgba(120,70,20,0.15);
+    overflow: hidden;
+    padding: 2px;
+    z-index: 3;
+    color: #5c2b11;
+  }
+  .cell.owned {
+    background: linear-gradient(145deg, #f6e9d7, #e9d5b9);
+    border-color: #92400e;
+  }
+
+  .cell-icon {
+    width: 100px; height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 2px;
+  }
+
+  .cell .price {
+    font-size: 10px;
+    color: #92400e;
+  }
+
+  .player {
+    position: absolute;
+    width: 20px; height: 20px;
+    background: #92400e;
+    border-radius: 50%;
+    z-index: 10;
+    box-shadow: 0 0 6px #0004;
+  }
+
+  /* 底部面板 */
+  .panel {
+    background: rgba(250,245,238,0.9);
+    border: 1px solid #d4a066;
+    border-radius: 10px;
+    padding: 12px;
+    margin-top: 0px;
+  }
+  .info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  .money {
+    color: #92400e;
+    font-weight: bold;
+  }
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  #rollBtn {
+    flex: 1;
+    background: #92400e;
+    color: #fff;
+    border: 1px solid #d4a066;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-family: "STXingkai", serif;
+    cursor: pointer;
+  }
+  #rollBtn:disabled {
+    background: #b99976;
+  }
+  .dice {
+    width: 42px; height: 42px;
+    background: #fff;
+    border: 1px solid #d4a066;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: #92400e;
+  }
+  .log {
+    height: 75px;
+    background: #fff;
+    border: 1px solid #e9d5b9;
+    border-radius: 6px;
+    padding: 8px;
+    margin-top: 8px;
+    overflow-y: auto;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  /* 弹窗 */
+  .modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(60,36,19,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    font-family: "STXingkai", serif;
+  }
+  .modal.show {
+    display: flex;
+  }
+  .card {
+    background: #fcf8f1;
+    width: 600px;
+    max-width: 90%;
+    border-radius: 16px;
+    border: 1px solid #d4a066;
+    overflow: hidden;
+    text-align: center;
+    padding-bottom: 20px;
+  }
+  .card img {
+    width: 100%; height: 260px;
+    object-fit: cover;
+  }
+  .card .info-text {
+    padding: 24px;
+    font-size: 18px;
+    line-height: 1.8;
+    text-align: left;
+    color: #5c2b11;
+  }
+  .card .btn-group {
+    display: flex;
+    gap: 20px;
+    padding: 0 24px;
+  }
+  .card .btn-group button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .btn-yes {
+    background: #92400e;
+    color: #fff;
+  }
+  .btn-no {
+    background: #d4a066;
+    color: #5c2b11;
+  }
+
+  /* 普通提示卡片 */
+  .tip-card {
+    background: #fcf8f1;
+    width: 600px;
+    max-width: 90%;
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid #d4a066;
+    text-align: center;
+    font-size: 19px;
+    line-height: 1.8;
+    color: #5c2b11;
+  }
+  .tip-card button {
+    margin-top: 20px;
+    padding: 10px 24px;
+    background: #92400e;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  /* 结束卡片 - 毛玻璃+金棕边框 */
+  .win-card {
+    background: rgba(255,250,245,0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(212,160,102,0.6);
+    box-shadow: 0 8px 32px rgba(120,70,20,0.2);
+    width: 600px;
+    max-width: 90%;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 19px;
+    line-height: 1.9;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  .win-card h2 {
+    color: #f6e9d7;
+    margin-bottom: 16px;
+    font-size: 28px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  }
+  .win-card button {
+    margin-top: 24px;
+    padding: 12px 28px;
+    background: rgba(146,64,14,0.8);
+    color: #fff;
+    border: 1px solid rgba(212,160,102,0.5);
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  .lose-card {
+    background: #fcf8f1;
+    width: 500px;
+    max-width: 90%;
+    padding: 30px;
+    border-radius: 16px;
+    border: 1px solid #d4a066;
+    text-align: center;
+  }
+  .lose-card h2 {
+    color: #92400e;
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+  .lose-card p {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  .lose-card button {
+    padding: 10px 24px;
+    background: #92400e;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  /* 开局身份卡片 - 毛玻璃+金棕边框 */
+  #introCard {
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    max-width: 90%;
+    background: rgba(255,250,245,0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(212,160,102,0.6);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    z-index: 99999;
+    box-shadow: 0 8px 32px rgba(120,70,20,0.2);
+    font-family: "STXingkai", serif;
+    line-height: 1.9;
+    font-size: 19px;
+    color: #070000;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  }
+  #introCard h2 {
+    color: #110a01;
+    margin-bottom: 16px;
+    font-size: 28px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  }
+  #introCard button {
+    margin-top: 24px;
+    padding: 12px 28px;
+    background: rgba(146,64,14,0.8);
+    color: #fff;
+    border: 1px solid rgba(212,160,102,0.5);
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+</style>
+</head>
+
+<body>
+   <!-- 导航栏 -->
+  <div class="box1">
+    <div class="logo">
+      <img src="../图片/logo.png" alt="云赏非遗">
+      <span>云赏非遗</span>
+    </div>
+    <nav class="nav-links">
+      <a href="../主页.html" class="nav-item">主页</a>
+      <a href="../3D地图/indext.html" class="nav-item">3D地图</a>
+      <div class="dropdown">
+        <a href="javascript:;" class="nav-item dropdown-toggle">项目展览</a>
+    <div class="dropdown-menu">
+      <a href="../3d光球.html" class="dropdown-item">3D粒子系统</a>
+      <a href="../3D照片墙/index.html" class="dropdown-item">照片博物馆</a>
+    </div>
+  </div>
+      <a href="../非遗论坛/index.html" class="nav-item">非遗论坛</a>
+      <a href="../ai/ai.html" class="nav-item">AI助手</a>
+    </nav>
+    
+    <div class="user-area">
+      <div class="user-avatar" onclick="goMyPage()">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <div class="user-info">
+        <span class="username">非遗传承人</span>
+        <span class="user-status">已登录</span>
+      </div>
+      <a href="../个人主页/index.html" class="login-btn">登录/注册</a>
+    </div>
+  </div>
+
+  <!-- 右侧浮动菜单 -->
+  <div class="side-menu-trigger" id="sideMenuTrigger">
+    <i class="fa-solid fa-bars-staggered"></i>
+  </div>
+  <div class="side-menu" id="sideMenu">
+    <a href="../游戏/game.html" class="side-item"><i class="fa-solid fa-house"></i><span>非遗消消乐</span></a>
+    <a href="../游戏/game2.html" class="side-item"><i class="fa-solid fa-images"></i><span>非遗华容道</span></a>
+    <a href="../游戏/game3.html" class="side-item"><i class="fa-solid fa-person"></i><span>非遗大富翁</span></a>
+    <a href="#footer" class="side-item"><i class="fa-solid fa-address-card"></i><span>关于我们</span></a>
+  </div>
+<div class="circle-wrap">
+  <div class="circle">
+    <div class="half-left"></div>
+    <div class="half-right"></div>
+  </div>
+</div>
+<div class="zhanwei"></div>
+<img src="../游戏/images/IMG_20260405_174621.jpg" class="music-btn" id="musicBtn">
+<button id="restartBtn">再来一把</button>
+
+<!-- 毛玻璃身份卡片 -->
+<div id="introCard">
+  <h2>万里茶道 · 茶商之行</h2>
+  <p>你是一位行走于万里茶道的茶商，生于闽地茶山，深谙茶性与商道。</p>
+  <p>从福建启程，跨越山河关隘，以茶为媒，寻访非遗技艺，终抵草原商都。</p>
+  <p>愿你以匠心行路，以诚信经商，续写茶道传奇。</p>
+  <button onclick="startGame()">启程出发</button>
+</div>
+
+<div class="wrap">
+  <div class="title">非遗大富翁 · 万里茶道</div>
+  <div class="game-box">
+    <canvas id="routeCanvas"></canvas>
+    <div class="grid" id="grid"></div>
+  </div>
+  <div class="panel">
+    <div class="info">
+      <div>传承币：<span class="money" id="money">350</span></div>
+      <div>商路进度：<span id="pos">0</span>/10</div>
+    </div>
+    <div class="btn-row">
+      <button id="rollBtn">掷骰子</button>
+      <div class="dice" id="dice">0</div>
+    </div>
+    <div class="log"></div>
+  </div>
+</div>
+
+<div class="modal" id="modal">
+  <div id="modalBody"></div>
+</div>
+
+<audio id="bgAudio" loop>
+  <source src="./bgm2.mp3">
+
+
+<script>
+      // ===== 用户登录状态 =====
+    const userArea = document.querySelector('.user-area');
+    const loginBtn = document.querySelector('.login-btn');
+    const isLoggedIn = true; // 改为 true 查看已登录效果
+
+    userArea.classList.toggle('logged-in', isLoggedIn);
+    userArea.classList.toggle('logged-out', !isLoggedIn);
+
+    loginBtn?.addEventListener('click', () => {
+      window.location.href = './login.html';
+    });
+   
+    // ===== 下拉框 =====
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+    dropdownToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      dropdownMenu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.dropdown')) {
+        dropdownMenu.classList.remove('show');
+      }
+    });
+
+    // ===== 右侧悬浮菜单 =====
+    const trigger = document.getElementById('sideMenuTrigger');
+    const sideMenu = document.getElementById('sideMenu');
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sideMenu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!sideMenu.contains(e.target) && !trigger.contains(e.target)) {
+        sideMenu.classList.remove('open');
+      }
+    });
+
+    // 点击菜单项后自动关闭
+    document.querySelectorAll('.side-item').forEach(item => {
+      item.addEventListener('click', () => sideMenu.classList.remove('open'));
+    });
+const cells = [
+  { name:"福建茶山", type:"start", price:0, icon:"./images/tu1.png", img:"./images/tu1.png", desc:"【启程·福建茶山】云雾缭绕，茶香满坡。你在此整装出发，怀揣古法与远志，正式踏上万里茶道，获得150传承币。"},
+  { name:"武夷制茶", type:"build", price:80, icon:"./images/tu2.png", img:"./images/tu2.png", desc:"【武夷制茶】岩骨花香，传承千年。你可在此习得岩茶古法，建立工坊，为商路储备好茶。"},
+  { name:"景德镇", type:"build", price:100, icon:"./images/tu3.png", img:"./images/tu3.png", desc:"【瓷都景德镇】白瓷青纹，茶器相宜。茶与瓷相伴而行，既可易货获利，亦能传扬文脉。"},
+  { name:"徽州木雕", type:"build", price:120, icon:"./images/tu4.png", img:"./images/tu4.png", desc:"【徽州木雕】一刀一刻皆匠心。你可学习木雕技艺，以匠心换路费，以诚意走四方。"},
+  { name:"晋商镖局", type:"event", icon:"./images/tu5.png", img:"./images/tu5.png", desc:"【晋商镖局】前路多险，偶遇镖局护行。或平安获利，或遭遇波折，一切皆是商途考验。"},
+  { name:"晋祠民俗", type:"build", price:120, icon:"./images/tu6.png", img:"./images/tu6.png", desc:"【晋祠民俗】三晋文脉悠长，你在此休整蓄力，感受民俗风情，为北行做好准备。"},
+  { name:"张库大道", type:"tax", icon:"./images/tu7.png", img:"./images/tu7.png", desc:"【张库大道·商税】北境要道，按例缴纳商税80传承币。过关之后，便是草原门户。"},
+  { name:"张家口皮毛", type:"build", price:120, icon:"./images/tu8.png", img:"./images/tu8.png", desc:"【张家口皮毛】茶马互市，以茶易皮。在此交易可获厚利，习得皮毛鞣制技艺。"},
+  { name:"草原驿站", type:"park", icon:"./images/tu9.png", img:"./images/tu9.png", desc:"【草原驿站】风沙渐起，在此停驻休整，养精蓄锐，再向商都前行。"},
+  { name:"库伦商都", type:"end", price:0, icon:"./images/tu10.png", img:"./images/tu10.png", desc:"【终点·库伦商都】万里茶道终抵彼岸。你以茶会友，以艺传心，成为茶道非遗传承者。"}
+];
+
+// 上下高度统一，只调左右间距
+const points = [
+  {x:8,  y:35}, {x:18, y:55}, {x:28, y:35}, {x:38, y:55},
+  {x:48, y:35}, {x:58, y:55}, {x:68, y:35}, {x:78, y:55},
+  {x:88, y:35}, {x:95, y:55}
+];
+
+const grid = document.getElementById('grid');
+const moneyEl = document.getElementById('money');
+const posEl = document.getElementById('pos');
+const diceEl = document.getElementById('dice');
+const rollBtn = document.getElementById('rollBtn');
+const logEl = document.querySelector('.log');
+const modal = document.getElementById('modal');
+const modalBody = document.getElementById('modalBody');
+const canvas = document.getElementById('routeCanvas');
+const ctx = canvas.getContext('2d');
+const introCard = document.getElementById('introCard');
+const bgAudio = document.getElementById('bgAudio');
+const musicBtn = document.getElementById('musicBtn');
+const restartBtn = document.getElementById('restartBtn');
+
+let money = 350;
+let pos = 0;
+let owns = new Array(cells.length).fill(false);
+
+function startGame(){ introCard.style.display='none'; rollBtn.disabled=false; }
+function resetGame(){
+  money=350; pos=0; owns=new Array(cells.length).fill(false);
+  moneyEl.textContent=money; posEl.textContent=pos; logEl.innerHTML='';
+  closeModal(); renderGrid(); rollBtn.disabled=false;
+}
+restartBtn.onclick=resetGame;
+
+function resizeCanvas(){
+  const r=canvas.parentElement.getBoundingClientRect();
+  canvas.width=r.width; canvas.height=r.height; drawSLine();
+}
+function drawSLine(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.lineWidth=3; ctx.strokeStyle='#d4a066'; ctx.lineCap='round';
+  const p=points.map(pt=>({x:pt.x*canvas.width/100,y:pt.y*canvas.height/100}));
+  ctx.beginPath(); ctx.moveTo(p[0].x,p[0].y);
+  for(let i=1;i<p.length;i++){
+    const mx=(p[i-1].x+p[i].x)/2; const my=(p[i-1].y+p[i].y)/2;
+    ctx.quadraticCurveTo(p[i-1].x,p[i-1].y,mx,my);
+  }
+  ctx.lineTo(p[p.length-1].x,p[p.length-1].y); ctx.stroke();
+}
+
+let playing=false;
+musicBtn.onclick=()=>{
+  if(!playing){ bgAudio.play(); musicBtn.classList.add('rotating');
+  }else{ bgAudio.pause(); musicBtn.classList.remove('rotating'); }
+  playing=!playing;
+};
+
+function renderGrid(){
+  grid.innerHTML='';
+  points.forEach((pt,i)=>{
+    const el=document.createElement('div');
+    el.className='cell'+(owns[i]?' owned':'');
+    el.style.left=pt.x+'%'; el.style.top=pt.y+'%';
+    el.innerHTML=`
+      <img src="${cells[i].icon}" class="cell-icon">
+      <div>${cells[i].name}</div>
+      ${cells[i].type==='build'?`<div class="price">${cells[i].price}币</div>`:''}
+    `;
+    grid.appendChild(el);
+  });
+  document.querySelectorAll('.player').forEach(e=>e.remove());
+  const p=document.createElement('div'); p.className='player';
+  const cp=points[pos]; p.style.left=cp.x+'%'; p.style.top=cp.y+'%';
+  grid.appendChild(p);
+}
+
+function log(text){ logEl.innerHTML+=text+'<br>'; logEl.scrollTop=logEl.scrollHeight; }
+function closeModal(){ modal.classList.remove('show'); if(money>=0) rollBtn.disabled=false; }
+
+function showTip(text){
+  modalBody.innerHTML=`<div class="tip-card"><div>${text}</div><button onclick="closeModal()">确定</button></div>`;
+  modal.classList.add('show');
+}
+function showBuy(c){
+  modalBody.innerHTML=`
+  <div class="card">
+    <img src="${c.img}">
+    <div class="info-text"><b>${c.name}</b><br><br>${c.desc}<br><br>价格：${c.price}传承币</div>
+    <div class="btn-group">
+      <button class="btn-yes" onclick="buy()">确定购买</button>
+      <button class="btn-no" onclick="closeModal()">暂不购买</button>
+    </div>
+  </div>`;
+  modal.classList.add('show');
+}
+function showLose(){
+  modalBody.innerHTML=`<div class="lose-card"><h2>商路中断</h2><p>传承币耗尽，游戏失败。</p><button onclick="closeModal()">关闭</button></div>`;
+  modal.classList.add('show'); rollBtn.disabled=true;
+}
+// 结束卡片：毛玻璃+金棕边框，文案替换为你选的诗意版本
+function showWin(){
+  modalBody.innerHTML=`
+  <div class="win-card">
+    <h2>🏆 茶道功成</h2>
+    <p>你踏过万水千山，终抵商都。茶香入尘，匠心留痕，万里茶道上，从此多了一位非遗传承者。</p>
+    <button onclick="closeModal()">确定</button>
+  </div>`;
+  modal.classList.add('show');
+}
+
+function buy(){
+  const c=cells[pos]; money-=c.price; owns[pos]=true;
+  moneyEl.textContent=money; log(`✅ 购入 ${c.name}`);
+  closeModal(); renderGrid(); if(money<0) showLose();
+}
+
+function triggerCell(){
+  const c=cells[pos]; rollBtn.disabled=true;
+  // 修复：商路进度在这里更新
+  posEl.textContent = pos + 1;
+
+  if(c.type==='start'){ money+=150; showTip(c.desc); log('💸获得启动资金150'); }
+  else if(c.type==='end'){ showWin(); log('抵达终点'); }
+  else if(c.type==='tax'){ money-=80; showTip(c.desc); log(' 💸缴纳商税80'); }
+  else if(c.type==='park'){ showTip(c.desc); log('🛖 驿站休整'); }
+  else if(c.type==='event'){
+    const r=Math.random(); let t;
+    if(r<0.3){ money+=100; t='💸平安获利100'; }
+    else if(r<0.6){ money-=70; t='💸遭遇损失70'; }
+    else{ t='一路平安'; }
+    showTip(c.desc+'<br><br>'+t); log(t);
+  }else if(c.type==='build'){
+    if(owns[pos]){ showTip(`✅ 已拥有【${c.name}】`); log('已拥有'); }
+    else if(money>=c.price){ showBuy(c); }
+    else{ showTip('❌ 传承币不足'); log('传承币不足'); closeModal(); }
+  }
+  moneyEl.textContent=money; if(money<0) showLose();
+}
+
+function move(step){
+  let t=setInterval(()=>{
+    pos++; if(pos>=cells.length) pos=cells.length-1;
+    renderGrid(); step--;
+    if(step<=0||pos===cells.length-1){ clearInterval(t); triggerCell(); }
+  },200);
+}
+
+rollBtn.onclick=()=>{
+  rollBtn.disabled=true;
+  const pool = [1,1,1,1,1,2,2,2,3,3];
+  const n = pool[Math.floor(Math.random() * pool.length)];
+  
+  diceEl.textContent=n; log(`🎲 掷出${n}`); move(n);
+};
+window.addEventListener('resize',resizeCanvas);
+resizeCanvas();
+renderGrid();
+rollBtn.disabled=true;
+function goMyPage() {
+  location.href = "../个人主页/index.html";
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>非遗华容道拼图</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            
+        }
+
+        body {
+            background: linear-gradient(135deg, #FDE8CD 0%, #F5D5A4 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #584e41;
+        }
+        .zhanwei{
+      width: 100%;
+      height: 80px;
+    }
+         /* ===== 导航栏 ===== */
+    .box1 {
+      height: 70px;
+      width: 100%;
+      background-color: rgba(100, 75, 55, 0.85);
+      backdrop-filter: blur(10px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 1000;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      border-bottom: 1px solid rgba(201, 168, 124, 0.3);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+
+    .logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      background-color: #c9a87c;
+    }
+
+    .logo span {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #e8e2d4;
+      letter-spacing: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .nav-item {
+      width: 100px;
+      text-align: center;
+      color: #e8e2d4;
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 6px 18px;
+      border-radius: 20px;
+      transition: all 0.3s;
+      letter-spacing: 1px;
+    }
+
+    .nav-item:hover {
+      background-color: rgba(180, 76, 58, 0.8);
+      color: #fff;
+    }
+
+    .user-area {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid #c9a87c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c9a87c;
+      font-size: 1rem;
+      overflow: hidden;
+    }
+
+    .user-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.3;
+    }
+
+    .username {
+      font-size: 0.82rem;
+      font-weight: bold;
+      color: #e8e2d4;
+    }
+
+    .user-status {
+      font-size: 0.62rem;
+      color: #c9a87c;
+    }
+
+    .login-btn {
+      background-color: #b44c3a;
+      color: #fff;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      white-space: nowrap;
+    }
+
+    .login-btn:hover {
+      background-color: #9e3a2a;
+      transform: translateY(-2px);
+    }
+
+    .user-area.logged-out .user-avatar,
+    .user-area.logged-out .user-info {
+      display: none;
+    }
+
+    .user-area.logged-in .login-btn {
+      display: none;
+    }
+
+    /* 下拉框容器 */
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropdown-toggle {
+      cursor: pointer;
+    }
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 50%;
+      transform: translateX(-50%);
+      min-width: 160px;
+      background: rgba(139, 109, 44, 0.7); /* 古铜金色，70%不透明，有通透感 */
+      backdrop-filter: blur(8px); /* 毛玻璃效果 */
+      -webkit-backdrop-filter: blur(8px); /* 兼容 Safari */
+      border: 1px solid rgba(212, 175, 55, 0.6);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 999;
+      text-align: center;
+      padding: 8px 0;
+    }
+
+    .dropdown-item {
+      display: block;
+      padding: 10px 16px;
+      color: #fff; /* 白色字，在金底色上清晰 */
+      text-decoration: none;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+    .dropdown-item:hover {
+      background: rgba(212, 175, 55, 0.3);
+      color: #f1d592;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+    /* ===== 右侧悬浮菜单 ===== */
+    .side-menu-trigger {
+      position: fixed;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      height: 80px;
+      background-color: rgba(100, 75, 55, 0.85);
+      backdrop-filter: blur(8px);
+      border-radius: 8px 0 0 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1100;
+      color: #c9a87c;
+      font-size: 1.1rem;
+      box-shadow: -3px 0 15px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s;
+    }
+
+    .side-menu-trigger:hover {
+      background-color: rgba(180, 76, 58, 0.9);
+    }
+
+    .side-menu {
+      position: fixed;
+      right: -130px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 120px;
+      background-color: rgba(60, 40, 25, 0.92);
+      backdrop-filter: blur(12px);
+      border-radius: 10px 0 0 10px;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 0;
+      z-index: 1099;
+      box-shadow: -5px 0 25px rgba(0, 0, 0, 0.4);
+      transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(201, 168, 124, 0.2);
+      border-right: none;
+    }
+
+    .side-menu.open {
+      right: 0;
+    }
+
+    .side-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 12px 0;
+      color: #c9a87c;
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 1px;
+      transition: all 0.25s;
+      border-bottom: 1px solid rgba(201, 168, 124, 0.1);
+    }
+
+    .side-item:last-child {
+      border-bottom: none;
+    }
+
+    .side-item i {
+      font-size: 1.1rem;
+    }
+
+    .side-item:hover {
+      background-color: rgba(180, 76, 58, 0.6);
+      color: #fff;
+    }
+
+        h1 {
+            color: #51420e;
+            margin-bottom: 20px;
+            text-align: center;
+            font-family: "Noto Serif SC", "Lora", serif;
+        }
+
+        .game-container {
+            background: linear-gradient(135deg, #FDE8CD 0%, #F5D5A4 100%);
+            border: 2px solid #ecd999;
+            border-radius: 15px;
+            padding: 25px;
+            width: 100%;
+            max-width: 800px;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stats-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .stat-box {
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid #79631d;
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-size: 14px;
+            color: #60542b;
+        }
+
+        .difficulty-select {
+            background: rgba(212, 175, 55, 0.2);
+            color: #57491c;
+            border: 1px solid #998236;
+            border-radius: 4px;
+            padding: 6px 10px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #8b0000, #b22222);
+            color: #fff;
+            border: 1px solid #d4af37;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #b22222, #8b0000);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        .board-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        #gameBoard {
+            display: grid;
+            gap: 3px;
+            background: #1a0f0a;
+            padding: 3px;
+            border: 2px solid #d4af37;
+            border-radius: 4px;
+        }
+
+        .tile {
+            width: 100px;
+            height: 100px;
+            background-size: cover;
+            background-position: center;
+            border: 2px solid #d4af37;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .tile:hover:not(.empty) {
+            transform: scale(1.02);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
+        }
+
+        .tile.empty {
+            background: #000;
+            border: none;
+            cursor: default;
+        }
+
+        .tile.highlight {
+            box-shadow: 0 0 15px 5px rgba(0, 255, 0, 0.7);
+        }
+
+        .pattern-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #332a0c;
+        }
+
+        .pattern-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .pattern-card {
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid #d4af37;
+            border-radius: 4px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pattern-card.selected {
+            background: rgba(226, 189, 66, 0.3);
+            border: 2px solid #ffd700;
+        }
+
+        .pattern-name {
+            color: #141005;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 17px;
+        }
+
+        .pattern-desc {
+            font-size: 14px;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+
+        .win-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(245, 241, 211, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .win-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-content {
+            background: #1a0f0a;
+            border: 2px solid #d4af37;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            color: #48423b;
+        }
+
+        .modal-content h2 {
+            color: #d4af37;
+            margin-bottom: 15px;
+        }
+
+        .modal-stats {
+            margin: 20px 0;
+        }
+
+        @media (max-width: 500px) {
+            .tile {
+                width: 80px;
+                height: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+  <div class="box1">
+    <div class="logo">
+      <img src="../图片/logo.png" alt="云赏非遗">
+      <span>云赏非遗</span>
+    </div>
+    <nav class="nav-links">
+      <a href="../主页.html" class="nav-item">主页</a>
+      <a href="../3D地图/indext.html" class="nav-item">3D地图</a>
+      <div class="dropdown">
+        <a href="javascript:;" class="nav-item dropdown-toggle">项目展览</a>
+    <div class="dropdown-menu">
+      <a href="../3d光球.html" class="dropdown-item">3D粒子系统</a>
+      <a href="../3D照片墙/index.html" class="dropdown-item">照片博物馆</a>
+    </div>
+  </div>
+      <a href="../非遗论坛/index.html" class="nav-item">非遗论坛</a>
+      <a href="../ai/ai.html" class="nav-item">AI助手</a>
+    </nav>
+    
+    <div class="user-area">
+      <div class="user-avatar" onclick="goMyPage()">
+        <i class="fa-solid fa-user"></i>
+      </div>
+      <div class="user-info">
+        <span class="username">非遗传承人</span>
+        <span class="user-status">已登录</span>
+      </div>
+      <a href="../个人主页/index.html" class="login-btn">登录/注册</a>
+    </div>
+  </div>
+
+  <!-- 右侧浮动菜单 -->
+  <div class="side-menu-trigger" id="sideMenuTrigger">
+    <i class="fa-solid fa-bars-staggered"></i>
+  </div>
+  <div class="side-menu" id="sideMenu">
+    <a href="../游戏/game.html" class="side-item"><i class="fa-solid fa-house"></i><span>非遗消消乐</span></a>
+    <a href="../游戏/game2.html" class="side-item"><i class="fa-solid fa-images"></i><span>非遗华容道</span></a>
+    <a href="../游戏/game3.html" class="side-item"><i class="fa-solid fa-person"></i><span>非遗大富翁</span></a>
+    <a href="#footer" class="side-item"><i class="fa-solid fa-address-card"></i><span>关于我们</span></a>
+  </div>
+  <div class="zhanwei"></div>
+<div class="circle-wrap">
+  <div class="circle">
+    <div class="half-left"></div>
+    <div class="half-right"></div>
+  </div>
+</div>
+    <h1>非遗华容道拼图</h1>
+
+    <div class="game-container">
+        <div class="top-bar">
+            <div class="stats-group">
+                <div class="stat-box">步数: <span id="moves">0</span></div>
+                <div class="stat-box">时间: <span id="timer">00:00</span></div>
+            </div>
+            <select id="difficulty" class="difficulty-select">
+                <option value="3">3×3 (入门)</option>
+                <option value="4">4×4 (挑战)</option>
+            </select>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn" id="shuffleBtn">打乱重开</button>
+            <button class="btn" id="hintBtn">提示</button>
+        </div>
+
+        <div class="board-container">
+            <div id="gameBoard"></div>
+        </div>
+
+        <div class="pattern-title">选择非遗图案</div>
+        <div class="pattern-grid">
+            <div class="pattern-card selected" data-pattern="feitian">
+                <div class="pattern-name">敦煌飞天</div>
+                <div class="pattern-desc">敦煌壁画 · 飘带飞扬，不借羽翼而翱九天</div>
+            </div>
+            <div class="pattern-card" data-pattern="qinghua">
+                <div class="pattern-name">青花缠枝</div>
+                <div class="pattern-desc">青花瓷 · 生生不息、万代绵长的吉寓意</div>
+            </div>
+            <div class="pattern-card" data-pattern="papercut">
+                <div class="pattern-name">蔚县剪纸</div>
+                <div class="pattern-desc">剪纸 · 阴刻为主、色彩浓艳的独特风格</div>
+            </div>
+            <div class="pattern-card" data-pattern="brocade">
+                <div class="pattern-name">南京云锦</div>
+                <div class="pattern-desc">云锦 · 通经断纬的丝织工艺最高成就</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="win-modal" id="winModal">
+        <div class="modal-content">
+            <h2>🎉 恭喜通关！</h2>
+            <div class="modal-stats">
+                <p>用时: <span id="finalTime">00:00</span></p>
+                <p>步数: <span id="finalMoves">0</span></p>
+            </div>
+            <button class="btn" id="playAgainBtn">再来一局</button>
+        </div>
+    </div>
+
+    <script>
+      
+        // ===== 用户登录状态 =====
+    const userArea = document.querySelector('.user-area');
+    const loginBtn = document.querySelector('.login-btn');
+    const isLoggedIn = true; // 改为 true 查看已登录效果
+
+    userArea.classList.toggle('logged-in', isLoggedIn);
+    userArea.classList.toggle('logged-out', !isLoggedIn);
+
+    loginBtn?.addEventListener('click', () => {
+      window.location.href = './login.html';
+    });
+   
+    // ===== 下拉框 =====
+    const dropdownToggle = document.querySelector('.dropdown-toggle');
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+    dropdownToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      dropdownMenu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.dropdown')) {
+        dropdownMenu.classList.remove('show');
+      }
+    });
+
+    // ===== 右侧悬浮菜单 =====
+    const trigger = document.getElementById('sideMenuTrigger');
+    const sideMenu = document.getElementById('sideMenu');
+
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      sideMenu.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!sideMenu.contains(e.target) && !trigger.contains(e.target)) {
+        sideMenu.classList.remove('open');
+      }
+    });
+
+    // 点击菜单项后自动关闭
+    document.querySelectorAll('.side-item').forEach(item => {
+      item.addEventListener('click', () => sideMenu.classList.remove('open'));
+    });
+
+        // 图片配置：key对应卡片data-pattern，value是你的本地图片路径
+        const patternImages = {
+            feitian: "feitian.jpg",
+            qinghua: "qinghua.jpg",
+            papercut: "jianzhi.jpg",
+            brocade: "yunjin.jpg"
+        };
+
+        let currentPattern = "feitian";
+        let size = 3;
+        let tiles = [];
+        let emptyIndex;
+        let moves = 0;
+        let timerInterval;
+        let seconds = 0;
+        let gameStarted = false;
+
+        const gameBoard = document.getElementById("gameBoard");
+        const movesEl = document.getElementById("moves");
+        const timerEl = document.getElementById("timer");
+        const shuffleBtn = document.getElementById("shuffleBtn");
+        const hintBtn = document.getElementById("hintBtn");
+        const difficultySelect = document.getElementById("difficulty");
+        const patternCards = document.querySelectorAll(".pattern-card");
+        const winModal = document.getElementById("winModal");
+        const finalTimeEl = document.getElementById("finalTime");
+        const finalMovesEl = document.getElementById("finalMoves");
+        const playAgainBtn = document.getElementById("playAgainBtn");
+
+        // 初始化游戏
+        function initGame() {
+            size = parseInt(difficultySelect.value);
+            tiles = [];
+            moves = 0;
+            seconds = 0;
+            gameStarted = false;
+            clearInterval(timerInterval);
+            movesEl.textContent = "0";
+            timerEl.textContent = "00:00";
+
+            // 创建有序数组，最后一个位置为空
+            for (let i = 0; i < size * size - 1; i++) {
+                tiles.push(i + 1);
+            }
+            tiles.push(0);
+            emptyIndex = tiles.length - 1;
+
+            renderBoard();
+        }
+
+        // 绘制游戏面板（图片带数字版本）
+        function renderBoard() {
+            gameBoard.innerHTML = "";
+            // 统一格子大小，4x4时也使用100px
+             const tileSize = 100;
+             gameBoard.style.gridTemplateColumns = `repeat(${size}, ${tileSize}px)`;
+             gameBoard.style.gap = "2px";
+
+             const imgSrc = patternImages[currentPattern];
+
+             tiles.forEach((value, index) => {
+             const tile = document.createElement("div");
+             tile.className = "tile";
+             tile.dataset.index = index;
+        
+             // 统一设置宽高
+             tile.style.width = `${tileSize}px`;
+             tile.style.height = `${tileSize}px`;
+
+             if (value === 0) {
+             tile.classList.add("empty");
+             tile.style.backgroundColor = "#1a0f0a";
+             tile.style.border = "none";
+            } else {
+             // 计算当前格子对应的原始图片中的位置
+             const row = Math.floor((value - 1) / size);
+             const col = (value - 1) % size;
+            
+             // 关键：背景图片的总宽度 = size * tileSize
+             // 每个格子显示图片的对应区域
+             const bgX = col * tileSize;
+             const bgY = row * tileSize;
+            
+             tile.style.backgroundImage = `url('${imgSrc}')`;
+             tile.style.backgroundSize = `${size * tileSize}px ${size * tileSize}px`;
+             tile.style.backgroundPosition = `-${bgX}px -${bgY}px`;
+             tile.style.backgroundRepeat = "no-repeat";
+             tile.style.backgroundColor = "#2a1a0f";
+            
+             // 可选：显示数字（调试用）
+             tile.style.display = "flex";
+             tile.style.alignItems = "center";
+             tile.style.justifyContent = "center";
+             tile.style.color = "rgba(255,255,255,1)";
+             tile.style.fontSize = "25px";
+             tile.style.fontWeight = "bold";
+             tile.style.textShadow = "1px 1px 0 #000";
+             tile.textContent = value;
+
+             tile.addEventListener("click", () => moveTile(index));
+            }
+
+            gameBoard.appendChild(tile);
+           });
+         }
+
+
+        // 移动方块
+        function moveTile(index) {
+            if (!gameStarted) {
+                gameStarted = true;
+                startTimer();
+            }
+
+            if (canMove(index)) {
+                // 交换位置
+                [tiles[index], tiles[emptyIndex]] = [tiles[emptyIndex], tiles[index]];
+                emptyIndex = index;
+                moves++;
+                movesEl.textContent = moves;
+                renderBoard();
+                checkWin();
+            }
+        }
+
+        // 检查是否可以移动
+        function canMove(index) {
+            const row = Math.floor(index / size);
+            const col = index % size;
+            const emptyRow = Math.floor(emptyIndex / size);
+            const emptyCol = emptyIndex % size;
+
+            return (
+                (Math.abs(row - emptyRow) === 1 && col === emptyCol) ||
+                (Math.abs(col - emptyCol) === 1 && row === emptyRow)
+            );
+        }
+
+        // 打乱方块（保证有解的打乱算法）
+        function shuffleTiles() {
+            const shuffleMoves = size * size * 20;
+            for (let i = 0; i < shuffleMoves; i++) {
+                const neighbors = getNeighbors(emptyIndex);
+                const randomNeighbor = neighbors[Math.floor(Math.random() * neighbors.length)];
+                [tiles[emptyIndex], tiles[randomNeighbor]] = [tiles[randomNeighbor], tiles[emptyIndex]];
+                emptyIndex = randomNeighbor;
+            }
+            moves = 0;
+            seconds = 0;
+            movesEl.textContent = "0";
+            timerEl.textContent = "00:00";
+            gameStarted = false;
+            clearInterval(timerInterval);
+            renderBoard();
+        }
+
+        // 获取空位置的相邻方块索引
+        function getNeighbors(index) {
+            const neighbors = [];
+            const row = Math.floor(index / size);
+            const col = index % size;
+
+            if (row > 0) neighbors.push(index - size);
+            if (row < size - 1) neighbors.push(index + size);
+            if (col > 0) neighbors.push(index - 1);
+            if (col < size - 1) neighbors.push(index + 1);
+
+            return neighbors;
+        }
+
+        // 开始计时
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                seconds++;
+                const mins = Math.floor(seconds / 60).toString().padStart(2, "0");
+                const secs = (seconds % 60).toString().padStart(2, "0");
+                timerEl.textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+
+        // 检查是否胜利
+        function checkWin() {
+            for (let i = 0; i < tiles.length - 1; i++) {
+                if (tiles[i] !== i + 1) return;
+            }
+            clearInterval(timerInterval);
+            showWinModal();
+        }
+
+        // 显示胜利弹窗
+        function showWinModal() {
+            const mins = Math.floor(seconds / 60).toString().padStart(2, "0");
+            const secs = (seconds % 60).toString().padStart(2, "0");
+            finalTimeEl.textContent = `${mins}:${secs}`;
+            finalMovesEl.textContent = moves;
+            winModal.classList.add("active");
+        }
+
+        // 提示功能
+        function showHint() {
+            // 高亮可移动的方块
+            const neighbors = getNeighbors(emptyIndex);
+            const tilesEl = document.querySelectorAll(".tile:not(.empty)");
+            tilesEl.forEach(tile => {
+                tile.classList.remove("highlight");
+                if (neighbors.includes(parseInt(tile.dataset.index))) {
+                    tile.classList.add("highlight");
+                    setTimeout(() => tile.classList.remove("highlight"), 1500);
+                }
+            });
+        }
+
+        // 事件监听
+        shuffleBtn.addEventListener("click", shuffleTiles);
+        hintBtn.addEventListener("click", showHint);
+        difficultySelect.addEventListener("change", initGame);
+        playAgainBtn.addEventListener("click", () => {
+            winModal.classList.remove("active");
+            initGame();
+            shuffleTiles();
+        });
+
+        patternCards.forEach(card => {
+            card.addEventListener("click", () => {
+                patternCards.forEach(c => c.classList.remove("selected"));
+                card.classList.add("selected");
+                currentPattern = card.dataset.pattern;
+                renderBoard();
+            });
+        });
+
+        // 初始化游戏
+        initGame();
+        shuffleTiles();
+        function goMyPage() {
+  location.href = "../个人主页/index.html";
+}
+    </script>
+</body>
+</html>

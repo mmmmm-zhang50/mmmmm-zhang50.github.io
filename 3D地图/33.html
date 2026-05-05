@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>轮播图</title>
+    <style>
+        *{
+            padding:0;
+            margin:0;
+            box-sizing:border-box;
+        }
+        ul,ol{
+            list-style:none;
+        }
+        html,body{
+            height:100%;
+        }
+        body{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            /* 放大后距离顶部 20vh */
+            padding-top:20vh;
+        }
+
+        /* 放大后 1.6 倍尺寸 */
+        .center{
+            width:800px;
+            height:640px;
+            background-color:antiquewhite;
+            position:relative;
+            border-radius:12px;
+            overflow:hidden;
+        }
+        .section{
+            width:800px;
+            height:480px;
+        }
+        .section2{
+            width:800px;
+            height:160px;
+            background:#f3eaadb4;
+            position:relative;
+        }
+        .section2 p{
+            text-align:center;
+            letter-spacing:8px;
+            font-size:28px;
+            line-height:70px;
+            color:#310101;
+        }
+        .items{
+            display:flex;
+            justify-content:flex-end;
+            padding:0 32px;
+            gap:24px;
+            font-size:26px;
+        }
+        .items .prev,
+        .items .next{
+            width:48px;
+            height:48px;
+            border-radius:50%;
+            background:rgba(255,255,255,0.3);
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:#282424;
+            cursor:pointer;
+            transition:all 0.2s;
+        }
+        /* 鼠标滑上箭头变亮变白 */
+        .items .prev:hover,
+        .items .next:hover{
+            background:#fff;
+            color:#e9e3e3;
+            transform:scale(1.1);
+        }
+        .section2 ul{
+            display:flex;
+            justify-content:center;
+            gap:16px;
+            margin-top:12px;
+        }
+        .section2 ul li{
+            width:16px;
+            height:16px;
+            background:rgba(255,255,255,0.4);
+            border-radius:50%;
+            cursor:pointer;
+        }
+        .section2 ul li.active{
+            transform:scale(1.3);
+            background:#fff;
+        }
+        .title{
+            margin-top:40px;
+            font-size:58px;
+            font-weight:bold;
+            color:#222;
+            text-align:center;
+        }
+        .title a{
+            color:#880416;
+            text-decoration:none;
+            text-shadow:3px 3px 8px rgba(0,0,0,0.4);
+            -webkit-box-reflect:below 8px linear-gradient(transparent 40%,rgba(0,0,0,0.2));
+        }
+        .title a:hover{
+            color:#54066e;
+            text-decoration:none;
+            text-shadow:3px 3px 8px rgba(0,0,0,0.4);
+            -webkit-box-reflect:below 8px linear-gradient(transparent 40%,rgba(0,0,0,0.2));
+        }
+
+        .wrapper{
+            position:fixed;
+            left:20px;
+            bottom:20px;
+            transform:scale(0.15);
+            transform-origin:left bottom;
+            transition:all 1.2s ease;
+            cursor:pointer;
+        }
+        .wrapper.show{
+            position:static;
+            transform:scale(1);
+            cursor:default;
+        }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="center">
+        <div class="section"></div>
+        <div class="section2">
+            <p>一一一</p>
+            <div class="items">
+                <div class="prev">←</div>
+                <div class="next">→</div>
+            </div>
+            <ul>
+                <li class="active"></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+            </ul>
+        </div>
+    </div>
+    <div class="title">
+        <a href="#info">
+            <img src="./se-05.png" alt="" style="width:18px;height:18px;display:inline-block;vertical-align:middle;margin-right:8px;transform: translate(155px,-3px);">
+            四川 川剧
+        </a>
+    </div>
+</div>
+
+<script>
+   const sliderData = [
+    { color: 'se-11.png', text: '火舌翻卷，一吐惊四座，蜀戏千年风骨。' },
+    { color: 'se-12.png', text: '脸谱威凛，旗甲猎猎，尽显武生豪情。' },
+    { color: 'se-13.png', text: '水袖翻飞，翩若惊鸿，演绎梨园情长。' },
+    { color: 'se-14.png', text: '旦角妆成，鬓影珠摇，半掩倾城色。' },
+    { color: 'se-15.png', text: '金盔锦甲，相对无言，戏里英雄气短。' },
+    { color: 'se-16.png', text: '彩衣蹁跹，扇影流转，群舞闹喧台。' },
+    { color: 'se-17.png', text: '幕后凝眸，戏外犹思，一入梨园忘世尘。' }
+    ];
+    const section = document.querySelector('.section');
+    const text = document.querySelector('.section2 p');
+    const prev = document.querySelector('.prev');
+    const next = document.querySelector('.next');
+    const lis = document.querySelectorAll('.section2 ul li');
+    let i = 0;
+    function update() {
+        // section.style.background = sliderData[i].color;
+        section.style.backgroundImage = "url(" + sliderData[i].color + ")";
+        section.style.backgroundSize = "contain";
+        section.style.backgroundRepeat = "no-repeat";
+        section.style.backgroundSize = 'cover';
+        text.innerHTML = sliderData[i].text;
+        lis.forEach((li, idx) => li.classList.toggle('active', idx === i));
+    }
+    update();
+    prev.addEventListener('click', (e) => { e.stopPropagation(); i--; if (i < 0) i = sliderData.length - 1; update(); });
+    next.addEventListener('click', (e) => { e.stopPropagation(); i++; if (i >= sliderData.length) i = 0; update(); });
+    let timer = setInterval(() => next.click(), 2000);
+    const center = document.querySelector('.center');
+    center.addEventListener('mouseenter', () => clearInterval(timer));
+    center.addEventListener('mouseleave', () => timer = setInterval(() => next.click(), 2000));
+
+    const wrapper = document.querySelector('.wrapper');
+    wrapper.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!wrapper.classList.contains('show')) {
+            wrapper.classList.add('show');
+        }
+    });
+    document.body.addEventListener('click', () => {
+        wrapper.classList.remove('show');
+    });
+</script>
+</body>
+</html>

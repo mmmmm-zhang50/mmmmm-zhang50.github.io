@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>四川非遗 - 目录页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        .container {
+            width: 950px;
+            margin: 0 auto;
+            background: #fff;
+            border: 1px solid #333;
+            padding: 20px;
+        }
+        /* 顶部标题栏 */
+        .top-tab {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .top-tab span {
+            display: inline-block;
+            padding: 8px 20px;
+            font-size: 16px;
+        }
+        .top-tab .active {
+            background: #c8102e;
+            color: #fff;
+            border-radius: 20px;
+        }
+        /* 统计数据行 */
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-label {
+            width: 250px;
+            height: 40px;
+            display: inline-block;
+            padding: 6px 12px;
+            border: 1px solid #999;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        .stat-number {
+            width: 220px;
+            height: 60px;
+            display: inline-block;
+            padding: 10px 30px;
+            border: 1px solid #999;
+            font-size: 48px;
+            font-weight: bold;
+        }
+        /* 筛选栏 */
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .filter-bar select,
+        .filter-bar input {
+            padding: 4px;
+            border: 1px solid #999;
+        }
+        .filter-bar button {
+            padding: 4px 10px;
+            background: #c8102e;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        /* 非遗表格 */
+        .heritage-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .heritage-table th,
+        .heritage-table td {
+            border: 1px solid #999;
+            padding: 8px;
+            text-align: center;
+        }
+        .heritage-table th {
+            background: #c8102e;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部标签 -->
+        <div class="top-tab">
+            <span>代表</span>
+            <span class="active">目录</span>
+        </div>
+
+        <!-- 统计数据 -->
+        <div class="stat-row">
+            <div class="stat-item">
+                <div class="stat-label">四川非遗传承人</div>
+                <div class="stat-number">134</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">四川非遗总数量</div>
+                <div class="stat-number">153</div>
+            </div>
+            
+        </div>
+
+        <!-- 筛选栏 -->
+        <div class="filter-bar">
+            <select>
+                <option>所有类别</option>
+            </select>
+            <select>
+                <option>所有时间</option>
+            </select>
+            <input type="text" placeholder="搜索名称">
+            <button>搜索</button>
+        </div>
+
+        <!-- 非遗表格 -->
+        <table class="heritage-table">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>编号</th>
+                    <th>项目名称</th>
+                    <th>类别</th>
+                    <th>公布时间</th>
+                    <th>保护单位</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Ⅰ-1</td>
+                    <td>格萨尔王传</td>
+                    <td>民间文学</td>
+                    <td>2006第一批</td>
+                    <td>四川省非遗保护中心</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Ⅰ-2</td>
+                    <td>彝族克智</td>
+                    <td>民间文学</td>
+                    <td>2008第二批</td>
+                    <td>美姑县文化馆</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Ⅰ-3</td>
+                    <td>康定情歌</td>
+                    <td>民间文学</td>
+                    <td>2011第三批</td>
+                    <td>康定市文化馆</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Ⅰ-4</td>
+                    <td>大禹传说</td>
+                    <td>民间文学</td>
+                    <td>2011第三批</td>
+                    <td>北川县文化馆</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Ⅱ-1</td>
+                    <td>川江号子</td>
+                    <td>传统音乐</td>
+                    <td>2006第一批</td>
+                    <td>四川省艺术研究院</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>Ⅱ-2</td>
+                    <td>羌笛演奏技艺</td>
+                    <td>传统音乐</td>
+                    <td>2006第一批</td>
+                    <td>茂县文化馆</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>Ⅱ-3</td>
+                    <td>川北薅草锣鼓</td>
+                    <td>传统音乐</td>
+                    <td>2008第二批</td>
+                    <td>青川县文化馆</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>Ⅱ-4</td>
+                    <td>南坪曲子</td>
+                    <td>传统音乐</td>
+                    <td>2008第二批</td>
+                    <td>九寨沟县文化馆</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>Ⅱ-5</td>
+                    <td>川西藏族山歌</td>
+                    <td>传统音乐</td>
+                    <td>2008第二批</td>
+                    <td>甘孜州文化馆</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>Ⅲ-1</td>
+                    <td>巴塘弦子舞</td>
+                    <td>传统舞蹈</td>
+                    <td>2006第一批</td>
+                    <td>巴塘县文化馆</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
